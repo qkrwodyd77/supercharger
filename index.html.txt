@@ -1,0 +1,58 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>테슬라 수퍼차저 지도</title>
+    <script src="https://openapi.map.naver.com/openapi/v3/maps.js?ncpClientId=YOUR_CLIENT_ID"></script>
+    <style>
+        body { font-family: Arial, sans-serif; text-align: center; }
+        #map { width: 100%; height: 600px; margin-top: 10px; }
+        .title { font-size: 24px; font-weight: bold; color: #d50000; margin-bottom: 10px; }
+        .subtitle { font-size: 16px; color: #555; margin-bottom: 20px; }
+    </style>
+</head>
+<body>
+
+    <div class="title">📍 테슬라 수퍼차저 위치</div>
+    <div class="subtitle">지도에서 수퍼차저를 클릭하면 상세 정보를 확인할 수 있습니다.</div>
+
+    <div id="map"></div>
+
+    <script>
+        var map = new naver.maps.Map('map', {
+            center: new naver.maps.LatLng(37.5665, 126.9780), // 서울 중심 좌표
+            zoom: 7
+        });
+
+        var locations = [
+            { lat: 37.5656, lng: 126.9769, title: "서울역 수퍼차저", address: "서울특별시 중구 한강대로 405", floor: "B2층", parking_fee: "30분 무료, 이후 10분당 1,000원" },
+            { lat: 35.1709, lng: 129.1308, title: "부산 센텀 수퍼차저", address: "부산 해운대구 센텀동로 35", floor: "3층", parking_fee: "1시간 무료, 이후 15분당 500원" },
+            { lat: 36.3504, lng: 127.3845, title: "대전 수퍼차저", address: "대전광역시 서구 둔산중로 50", floor: "1층", parking_fee: "20분 무료, 이후 10분당 800원" }
+            // 🛠️ 여기에 추가적인 수퍼차저 데이터를 입력 가능!
+        ];
+
+        locations.forEach(function (location) {
+            var marker = new naver.maps.Marker({
+                position: new naver.maps.LatLng(location.lat, location.lng),
+                map: map,
+                title: location.title
+            });
+
+            var infoWindow = new naver.maps.InfoWindow({
+                content: `<div style="padding:10px; font-size:14px;">
+                            <strong>${location.title}</strong><br>
+                            📍 <b>주소:</b> ${location.address}<br>
+                            🏬 <b>위치:</b> ${location.floor}<br>
+                            💰 <b>주차 요금:</b> ${location.parking_fee}
+                          </div>`
+            });
+
+            naver.maps.Event.addListener(marker, "click", function() {
+                infoWindow.open(map, marker);
+            });
+        });
+    </script>
+
+</body>
+</html>
