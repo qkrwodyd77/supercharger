@@ -3,8 +3,8 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Tesla Supercharger Map</title>
-    <script src="https://openapi.map.naver.com/openapi/v3/maps.js?ncpClientId=sva11nqtl7"></script>
+    <title>Tesla Supercharger</title>
+    <script src="https://openapi.map.naver.com/openapi/v3/maps.js?ncpClientId=YOUR_NAVER_MAP_CLIENT_ID"></script>
     <style>
         body {
             font-family: Arial, sans-serif;
@@ -14,94 +14,108 @@
         }
         #map {
             width: 100%;
-            height: 100vh;
+            height: 90vh;
+        }
+        .header {
+            font-size: 28px;
+            font-weight: bold;
+            color: #666;
+            margin: 15px 0;
+            font-family: 'Arial Black', sans-serif;
+            letter-spacing: 2px;
         }
         .search-container {
-            position: absolute;
-            top: 10px;
-            left: 50%;
-            transform: translateX(-50%);
             display: flex;
+            justify-content: center;
             align-items: center;
-            background: white;
-            padding: 8px;
-            border-radius: 8px;
-            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.2);
+            margin-bottom: 10px;
+            position: relative;
         }
-        .search-box {
-            width: 200px;
+        #searchBox {
+            width: 60%;
             padding: 8px;
-            border: none;
-            outline: none;
-            font-size: 14px;
+            font-size: 16px;
+            border: 1px solid #ccc;
+            border-radius: 5px;
         }
         .clear-btn {
+            position: absolute;
+            right: 18%;
             cursor: pointer;
-            color: gray;
-            font-size: 16px;
-            padding: 0 10px;
+            font-size: 18px;
+            color: #999;
         }
-        .search-btn {
-            background: #03C75A;
+        #searchBtn {
+            padding: 8px 15px;
+            font-size: 16px;
+            background-color: #03C75A;
             color: white;
             border: none;
-            padding: 8px 12px;
-            cursor: pointer;
-            font-size: 14px;
             border-radius: 5px;
+            cursor: pointer;
             margin-left: 5px;
         }
         .gps-btn {
             position: absolute;
-            top: 50px;
-            right: 10px;
-            background: white;
-            border: none;
+            top: 15px;
+            right: 15px;
+            z-index: 1000;
+            background-color: white;
             padding: 10px;
             border-radius: 50%;
-            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.2);
+            box-shadow: 0px 0px 10px rgba(0,0,0,0.2);
             cursor: pointer;
-            font-size: 16px;
+        }
+        .info-box {
+            padding: 10px;
+            font-size: 14px;
+            text-align: left;
         }
         .nav-btn {
             display: block;
-            margin: 10px auto;
-            padding: 10px;
+            width: 100%;
+            padding: 8px;
+            margin-top: 5px;
             text-align: center;
-            font-size: 16px;
             text-decoration: none;
+            font-size: 14px;
             border-radius: 5px;
             color: white;
-            width: 150px;
+        }
+        .tmap-btn {
+            background-color: #FF7800;
+        }
+        .kakao-btn {
+            background-color: #FEE500;
+            color: black;
         }
     </style>
 </head>
 <body>
 
+    <div class="header">TESLA SUPERCHARGER</div>
+
     <div class="search-container">
-        <input type="text" id="searchBox" class="search-box" placeholder="지역 검색">
+        <input type="text" id="searchBox" placeholder="지역을 검색하세요">
         <span class="clear-btn" onclick="clearSearch()">✖</span>
-        <button class="search-btn" onclick="searchLocations()">검색</button>
+        <button id="searchBtn" onclick="searchLocations()">검색</button>
     </div>
 
-    <button class="gps-btn" onclick="moveToCurrentLocation()">📍</button>
-
     <div id="map"></div>
+    <div class="gps-btn" onclick="getCurrentLocation()">📍</div>
 
     <script>
-        var map = new naver.maps.Map("map", {
-            center: new naver.maps.LatLng(37.5665, 126.9780), // 서울 중심 좌표
+        var map = new naver.maps.Map('map', {
+            center: new naver.maps.LatLng(37.5665, 126.9780), // 서울 중심
             zoom: 12
         });
 
-        var allLocations = []; // 전체 데이터를 저장할 배열
-        var selectedLat, selectedLng, selectedTitle;
+        var allLocations = [];
 
+        // JSON 데이터 로드 및 마커 표시 함수
         function loadMarkers(locations) {
-            map.setZoom(12); 
-            map.setCenter(new naver.maps.LatLng(37.5665, 126.9780)); 
-
-            map.dataProvider && map.dataProvider.setMap(null); 
+            map.setZoom(12);
+            map.setCenter(new naver.maps.LatLng(37.5665, 126.9780));
 
             locations.forEach(location => {
                 var marker = new naver.maps.Marker({
@@ -111,36 +125,38 @@
                 });
 
                 var infoWindow = new naver.maps.InfoWindow({
-                    content: `<div style="padding:10px; font-size:14px;">
+                    content: `<div class="info-box">
                                 <strong>${location.title}</strong><br>
                                 📍 <b>주소:</b> ${location.address}<br>
                                 🏬 <b>위치:</b> ${location.location}<br>
                                 💰 <b>주차요금:</b> ${location.fee ? location.fee : '정보 없음'}<br>
-                                <a href="#" id="tmaps-button" class="nav-btn" style="background: #0037ff;">🚗 T맵 실행</a>
-                                <a href="#" id="kakao-nav-button" class="nav-btn" style="background: #ffcc00;">🚖 카카오내비 실행</a>
+                                <a href="#" class="nav-btn tmap-btn" onclick="openTMap(${location.latitude}, ${location.longitude})">T맵 길찾기</a>
+                                <a href="#" class="nav-btn kakao-btn" onclick="openKakaoNavi(${location.latitude}, ${location.longitude})">카카오내비 길찾기</a>
                               </div>`
                 });
 
                 naver.maps.Event.addListener(marker, "click", function () {
-                    selectedLat = location.latitude;
-                    selectedLng = location.longitude;
-                    selectedTitle = location.title;
-                    infoWindow.open(map, marker);
-
-                    document.getElementById("tmaps-button").addEventListener("click", function () {
-                        openTMap(selectedLat, selectedLng, selectedTitle);
-                    });
-
-                    document.getElementById("kakao-nav-button").addEventListener("click", function () {
-                        openKakaoNavi(selectedLat, selectedLng, selectedTitle);
-                    });
+                    if (infoWindow.getMap()) {
+                        infoWindow.close();
+                    } else {
+                        infoWindow.open(map, marker);
+                    }
                 });
             });
         }
 
+        // JSON 데이터 로드
+        fetch("https://qkrwodyd77.github.io/supercharger/superchargers.json")
+            .then(response => response.json())
+            .then(locations => {
+                allLocations = locations;
+                loadMarkers(allLocations);
+            })
+            .catch(error => console.error("JSON 데이터 로드 실패:", error));
+
+        // 검색 기능
         function searchLocations() {
             var query = document.getElementById("searchBox").value.trim();
-
             if (query === "") {
                 loadMarkers(allLocations);
             } else {
@@ -155,43 +171,45 @@
             }
         }
 
+        // 검색어 지우기
         function clearSearch() {
             document.getElementById("searchBox").value = "";
             loadMarkers(allLocations);
         }
 
-        function moveToCurrentLocation() {
+        // GPS 기능
+        function getCurrentLocation() {
             if (navigator.geolocation) {
                 navigator.geolocation.getCurrentPosition(position => {
                     var lat = position.coords.latitude;
                     var lng = position.coords.longitude;
                     map.setCenter(new naver.maps.LatLng(lat, lng));
-                    map.setZoom(14);
-                }, () => {
+                    map.setZoom(15);
+                }, error => {
                     alert("위치 정보를 가져올 수 없습니다.");
                 });
             } else {
-                alert("브라우저가 위치 정보를 지원하지 않습니다.");
+                alert("이 브라우저에서는 GPS를 지원하지 않습니다.");
             }
         }
 
-        function openTMap(lat, lng, name) {
-            var tmapUrl = `tmap://route?goalx=${lng}&goaly=${lat}&goalname=${encodeURIComponent(name)}`;
-            window.location.href = tmapUrl;
+        // T맵 길찾기
+        function openTMap(destLat, destLng) {
+            if (navigator.geolocation) {
+                navigator.geolocation.getCurrentPosition(position => {
+                    var startLat = position.coords.latitude;
+                    var startLng = position.coords.longitude;
+                    window.location.href = `tmap://route?startx=${startLng}&starty=${startLat}&endx=${destLng}&endy=${destLat}`;
+                });
+            } else {
+                alert("GPS 정보를 가져올 수 없습니다.");
+            }
         }
 
-        function openKakaoNavi(lat, lng, name) {
-            var kakaoUrl = `kakaomap://route?sp=${lat},${lng}&ep=${lat},${lng}&by=CAR`;
-            window.location.href = kakaoUrl;
+        // 카카오내비 길찾기
+        function openKakaoNavi(destLat, destLng) {
+            window.location.href = `kakaomap://route?sp=,${destLat},${destLng}&ep=,${destLat},${destLng}&by=CAR`;
         }
-
-        fetch("https://qkrwodyd77.github.io/supercharger/superchargers.json")
-            .then(response => response.json())
-            .then(locations => {
-                allLocations = locations;
-                loadMarkers(allLocations);
-            })
-            .catch(error => console.error("JSON 데이터 로드 실패:", error));
     </script>
 
 </body>
