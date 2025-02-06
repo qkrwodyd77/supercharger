@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>테슬라 수퍼차저 지도</title>
+    <title>Tesla Supercharger</title>
     <script src="https://openapi.map.naver.com/openapi/v3/maps.js?ncpClientId=sva11nqtl7"></script>
     <style>
         body {
@@ -17,15 +17,19 @@
             position: relative;
         }
         .title {
-            font-size: 24px;
+            font-size: 28px;
             font-weight: bold;
+            font-family: 'Arial Black', sans-serif;
             color: #d50000;
             margin-bottom: 10px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 10px;
         }
-        .subtitle {
-            font-size: 16px;
-            color: #555;
-            margin-bottom: 10px;
+        .title img {
+            width: 120px;
+            height: auto;
         }
         /* 검색창 & 버튼 */
         .search-container {
@@ -92,8 +96,10 @@
 </head>
 <body>
 
-    <div class="title">📍 테슬라 수퍼차저 위치</div>
-    <div class="subtitle">지도에서 수퍼차저를 클릭하면 상세 정보를 확인할 수 있습니다.</div>
+    <div class="title">
+        <img src="https://upload.wikimedia.org/wikipedia/commons/e/ec/Tesla_logo.png" alt="Tesla Logo">
+        Tesla Supercharger
+    </div>
 
     <!-- 검색창 & 버튼 -->
     <div class="search-container">
@@ -110,8 +116,8 @@
 
     <script>
         var map = new naver.maps.Map('map', {
-            center: new naver.maps.LatLng(36.5, 127.5), // 대한민국 중심 좌표
-            zoom: 7
+            center: new naver.maps.LatLng(37.5665, 126.9780), // 서울 중심 좌표
+            zoom: 11 // 서울 중심으로 확대
         });
 
         var allLocations = []; // 전체 데이터를 저장할 배열
@@ -120,8 +126,6 @@
         // JSON 데이터 로드 및 마커 표시 함수
         function loadMarkers(locations) {
             clearMarkers(); // 기존 마커 제거
-            map.setZoom(7); // 줌 레벨 초기화
-            map.setCenter(new naver.maps.LatLng(36.5, 127.5)); // 대한민국 중심 좌표로 초기화
 
             locations.forEach(location => {
                 var marker = new naver.maps.Marker({
