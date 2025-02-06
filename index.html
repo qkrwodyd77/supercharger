@@ -14,108 +14,97 @@
         }
         #map {
             width: 100%;
-            height: 90vh;
-        }
-        .header {
-            font-size: 28px;
-            font-weight: bold;
-            color: #666;
-            margin: 15px 0;
-            font-family: 'Arial Black', sans-serif;
-            letter-spacing: 2px;
+            height: 600px;
         }
         .search-container {
             display: flex;
             justify-content: center;
             align-items: center;
-            margin-bottom: 10px;
+            margin: 10px 0;
             position: relative;
         }
         #searchBox {
-            width: 60%;
+            width: 300px; /* PC에서 너무 길어지는 것 방지 */
             padding: 8px;
-            font-size: 16px;
             border: 1px solid #ccc;
-            border-radius: 5px;
+            border-radius: 4px;
         }
-        .clear-btn {
+        #clearSearch {
             position: absolute;
-            right: 18%;
+            right: 90px;
+            top: 50%;
+            transform: translateY(-50%);
             cursor: pointer;
-            font-size: 18px;
-            color: #999;
-        }
-        #searchBtn {
-            padding: 8px 15px;
+            background: none;
+            border: none;
             font-size: 16px;
+            color: #888;
+        }
+        #searchButton {
+            padding: 8px 15px;
             background-color: #03C75A;
             color: white;
             border: none;
-            border-radius: 5px;
+            border-radius: 4px;
             cursor: pointer;
             margin-left: 5px;
         }
-        .gps-btn {
+        .gps-button {
             position: absolute;
-            top: 15px;
-            right: 15px;
-            z-index: 1000;
+            top: 10px;
+            right: 10px;
             background-color: white;
-            padding: 10px;
+            border: 1px solid #ccc;
             border-radius: 50%;
-            box-shadow: 0px 0px 10px rgba(0,0,0,0.2);
+            padding: 8px;
             cursor: pointer;
+            box-shadow: 0 2px 5px rgba(0,0,0,0.3);
         }
         .info-box {
             padding: 10px;
             font-size: 14px;
-            text-align: left;
         }
-        .nav-btn {
-            display: block;
-            width: 100%;
-            padding: 8px;
-            margin-top: 5px;
-            text-align: center;
+        .navi-buttons {
+            margin-top: 10px;
+        }
+        .navi-buttons a {
             text-decoration: none;
-            font-size: 14px;
+            display: inline-block;
+            padding: 5px 10px;
+            margin: 5px;
             border-radius: 5px;
             color: white;
+            font-size: 14px;
         }
-        .tmap-btn {
-            background-color: #FF7800;
-        }
-        .kakao-btn {
-            background-color: #FEE500;
-            color: black;
-        }
+        .navi-tmap { background-color: #0068FF; }
+        .navi-kakao { background-color: #FEE500; color: black; }
     </style>
 </head>
 <body>
 
-    <div class="header">TESLA SUPERCHARGER</div>
+    <h1 style="color: #888; font-size: 28px; font-family: 'Arial Black', sans-serif;">TESLA SUPERCHARGER</h1>
 
     <div class="search-container">
-        <input type="text" id="searchBox" placeholder="지역을 검색하세요">
-        <span class="clear-btn" onclick="clearSearch()">✖</span>
-        <button id="searchBtn" onclick="searchLocations()">검색</button>
+        <input type="text" id="searchBox" placeholder="지역명을 입력하세요">
+        <button id="clearSearch">✖</button>
+        <button id="searchButton">검색</button>
     </div>
 
     <div id="map"></div>
-    <div class="gps-btn" onclick="getCurrentLocation()">📍</div>
+    <button class="gps-button" onclick="moveToCurrentLocation()">📍</button>
 
     <script>
         var map = new naver.maps.Map('map', {
             center: new naver.maps.LatLng(37.5665, 126.9780), // 서울 중심
-            zoom: 12
+            zoom: 11
         });
 
         var allLocations = [];
+        var markers = [];
 
-        // JSON 데이터 로드 및 마커 표시 함수
         function loadMarkers(locations) {
-            map.setZoom(12);
-            map.setCenter(new naver.maps.LatLng(37.5665, 126.9780));
+            markers.forEach(marker => marker.setMap(null));
+            markers = [];
 
             locations.forEach(location => {
                 var marker = new naver.maps.Marker({
@@ -129,9 +118,11 @@
                                 <strong>${location.title}</strong><br>
                                 📍 <b>주소:</b> ${location.address}<br>
                                 🏬 <b>위치:</b> ${location.location}<br>
-                                💰 <b>주차요금:</b> ${location.fee ? location.fee : '정보 없음'}<br>
-                                <a href="#" class="nav-btn tmap-btn" onclick="openTMap(${location.latitude}, ${location.longitude})">T맵 길찾기</a>
-                                <a href="#" class="nav-btn kakao-btn" onclick="openKakaoNavi(${location.latitude}, ${location.longitude})">카카오내비 길찾기</a>
+                                💰 <b>주차요금:</b> ${location.fee || '정보 없음'}<br>
+                                <div class="navi-buttons">
+                                    <a class="navi-tmap" href="tmap://route?goalx=${location.longitude}&goaly=${location.latitude}" target="_blank">🚗 티맵</a>
+                                    <a class="navi-kakao" href="kakaomap://route?ep=${location.latitude},${location.longitude}" target="_blank">🚗 카카오네비</a>
+                                </div>
                               </div>`
                 });
 
@@ -142,10 +133,11 @@
                         infoWindow.open(map, marker);
                     }
                 });
+
+                markers.push(marker);
             });
         }
 
-        // JSON 데이터 로드
         fetch("https://qkrwodyd77.github.io/supercharger/superchargers.json")
             .then(response => response.json())
             .then(locations => {
@@ -154,61 +146,53 @@
             })
             .catch(error => console.error("JSON 데이터 로드 실패:", error));
 
-        // 검색 기능
         function searchLocations() {
             var query = document.getElementById("searchBox").value.trim();
+
             if (query === "") {
+                map.setCenter(new naver.maps.LatLng(37.5665, 126.9780));
+                map.setZoom(11);
                 loadMarkers(allLocations);
             } else {
                 var filteredLocations = allLocations.filter(location =>
                     location.title.includes(query) || location.address.includes(query)
                 );
+
                 if (filteredLocations.length > 0) {
-                    map.setCenter(new naver.maps.LatLng(filteredLocations[0].latitude, filteredLocations[0].longitude));
+                    var firstLocation = filteredLocations[0];
+                    map.setCenter(new naver.maps.LatLng(firstLocation.latitude, firstLocation.longitude));
                     map.setZoom(14);
                 }
+
                 loadMarkers(filteredLocations);
             }
         }
 
-        // 검색어 지우기
-        function clearSearch() {
-            document.getElementById("searchBox").value = "";
-            loadMarkers(allLocations);
-        }
+        document.getElementById("searchButton").addEventListener("click", searchLocations);
+        document.getElementById("searchBox").addEventListener("keypress", function (e) {
+            if (e.key === "Enter") searchLocations();
+        });
 
-        // GPS 기능
-        function getCurrentLocation() {
+        document.getElementById("clearSearch").addEventListener("click", function () {
+            document.getElementById("searchBox").value = "";
+            map.setCenter(new naver.maps.LatLng(37.5665, 126.9780));
+            map.setZoom(11);
+            loadMarkers(allLocations);
+        });
+
+        function moveToCurrentLocation() {
             if (navigator.geolocation) {
-                navigator.geolocation.getCurrentPosition(position => {
+                navigator.geolocation.getCurrentPosition(function (position) {
                     var lat = position.coords.latitude;
                     var lng = position.coords.longitude;
                     map.setCenter(new naver.maps.LatLng(lat, lng));
-                    map.setZoom(15);
-                }, error => {
+                    map.setZoom(14);
+                }, function () {
                     alert("위치 정보를 가져올 수 없습니다.");
                 });
             } else {
-                alert("이 브라우저에서는 GPS를 지원하지 않습니다.");
+                alert("이 브라우저에서는 위치 정보를 지원하지 않습니다.");
             }
-        }
-
-        // T맵 길찾기
-        function openTMap(destLat, destLng) {
-            if (navigator.geolocation) {
-                navigator.geolocation.getCurrentPosition(position => {
-                    var startLat = position.coords.latitude;
-                    var startLng = position.coords.longitude;
-                    window.location.href = `tmap://route?startx=${startLng}&starty=${startLat}&endx=${destLng}&endy=${destLat}`;
-                });
-            } else {
-                alert("GPS 정보를 가져올 수 없습니다.");
-            }
-        }
-
-        // 카카오내비 길찾기
-        function openKakaoNavi(destLat, destLng) {
-            window.location.href = `kakaomap://route?sp=,${destLat},${destLng}&ep=,${destLat},${destLng}&by=CAR`;
         }
     </script>
 
