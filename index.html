@@ -13,25 +13,28 @@
 
         /* 검색창 컨테이너 */
         #searchContainer {
-            position: relative;
-            display: inline-flex;
+            display: flex;
+            justify-content: center;
             align-items: center;
             margin-bottom: 10px;
         }
 
         /* 검색 입력창 */
         #searchBox {
-            padding: 8px 35px 8px 10px; /* 오른쪽 여백 확보 */
+            padding: 8px 35px 8px 10px; /* 내부 여백 조정 (오른쪽 X 버튼 자리 확보) */
             width: 250px;
             font-size: 14px;
             border: 1px solid #ccc;
             border-radius: 5px;
+            position: relative;
         }
 
-        /* X 버튼 (검색창 내부 우측 끝) */
+        /* X 버튼 (검색창 내부 우측 끝에 위치) */
         #clearButton {
             position: absolute;
-            right: 10px;
+            right: 38px; /* 검색창 내부 오른쪽 끝에 위치 */
+            top: 50%;
+            transform: translateY(-50%);
             background: none;
             border: none;
             cursor: pointer;
@@ -51,6 +54,12 @@
             border-radius: 5px;
             margin-left: 5px;
         }
+
+        /* X 버튼이 검색창 내부에 배치되도록 input을 감싼 div */
+        .searchBoxWrapper {
+            position: relative;
+            display: inline-block;
+        }
     </style>
 </head>
 <body>
@@ -59,8 +68,10 @@
     <div class="subtitle">지도에서 수퍼차저를 클릭하면 상세 정보를 확인할 수 있습니다.</div>
 
     <div id="searchContainer">
-        <input type="text" id="searchBox" placeholder="지역명 또는 상호 검색" oninput="toggleClearButton()" onkeypress="handleEnter(event)">
-        <button id="clearButton" onclick="clearSearch()">×</button>
+        <div class="searchBoxWrapper">
+            <input type="text" id="searchBox" placeholder="지역명 또는 상호 검색" oninput="toggleClearButton()" onkeypress="handleEnter(event)">
+            <button id="clearButton" onclick="clearSearch()">×</button>
+        </div>
         <button id="searchButton" onclick="searchLocations()">검색</button>
     </div>
 
