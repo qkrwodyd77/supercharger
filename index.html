@@ -2,145 +2,111 @@
 <html lang="ko">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
     <title>Tesla Supercharger</title>
     <script src="https://openapi.map.naver.com/openapi/v3/maps.js?ncpClientId=sva11nqtl7"></script>
     <style>
         body, html {
+            height: 100%;
             margin: 0;
             padding: 0;
+            font-family: Arial, sans-serif;
+            text-align: center;
+        }
+        #map {
             width: 100%;
-            height: 100%;
-            display: flex;
-            flex-direction: column;
-            align-items: center;
+            height: calc(100vh - 60px);
         }
-
-        /* 타이틀 스타일 */
-        .title {
-            font-family: 'Arial', sans-serif;
-            font-size: 28px;
-            font-weight: bold;
-            color: #555;
-            margin-top: 10px;
-            text-transform: uppercase;
-            letter-spacing: 2px;
-        }
-
-        /* 검색 컨테이너 */
         .search-container {
-            position: relative;
-            width: 90%;
-            max-width: 500px;
             display: flex;
+            justify-content: center;
             align-items: center;
-            margin-bottom: 10px;
+            margin: 10px 0;
+            position: relative;
         }
-
-        /* 검색 입력 필드 */
         #searchBox {
-            flex-grow: 1;
-            padding: 10px 40px 10px 10px;
-            font-size: 16px;
+            width: 280px;
+            padding: 8px 35px 8px 10px;
             border: 1px solid #ccc;
-            border-radius: 5px;
-            outline: none;
+            border-radius: 4px;
+            position: relative;
         }
-
-        /* 검색 버튼 */
-        #searchButton {
-            padding: 10px 15px;
-            background-color: #03C75A;
-            color: white;
-            font-size: 16px;
-            border: none;
-            cursor: pointer;
-            border-radius: 5px;
-            margin-left: 8px;
-        }
-
-        /* X 버튼 스타일 */
-        .clear-btn {
+        #clearSearch {
             position: absolute;
-            right: 60px;
+            right: 155px;
             top: 50%;
             transform: translateY(-50%);
             cursor: pointer;
-            font-size: 18px;
-            color: #888;
             background: none;
             border: none;
-            display: none;
+            font-size: 16px;
+            color: #888;
         }
-
-        /* 지도 컨테이너 */
-        #map {
-            width: 100%;
-            height: calc(100vh - 100px);
+        #searchButton {
+            padding: 8px 15px;
+            background-color: #03C75A;
+            color: white;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+            margin-left: 5px;
         }
-
-        /* 내 위치 버튼 */
-        #myLocationButton {
+        .gps-button {
             position: absolute;
             top: 10px;
             right: 10px;
-            background: white;
-            padding: 10px;
+            background-color: white;
+            border: 1px solid #ccc;
             border-radius: 50%;
-            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.3);
+            padding: 8px;
             cursor: pointer;
-            z-index: 1000;
+            box-shadow: 0 2px 5px rgba(0,0,0,0.3);
         }
-
-        /* 네비게이션 버튼 */
-        .nav-buttons {
-            display: flex;
-            justify-content: center;
-            gap: 10px;
+        .info-box {
+            padding: 10px;
+            font-size: 14px;
+        }
+        .navi-buttons {
             margin-top: 10px;
         }
-
-        .nav-buttons a {
-            padding: 10px;
-            background-color: #03C75A;
-            color: white;
+        .navi-buttons a {
             text-decoration: none;
+            display: inline-block;
+            padding: 5px 10px;
+            margin: 5px;
             border-radius: 5px;
+            color: white;
+            font-size: 14px;
         }
+        .navi-tmap { background-color: #0068FF; }
+        .navi-kakao { background-color: #FEE500; color: black; }
     </style>
 </head>
 <body>
 
-    <!-- 타이틀 -->
-    <div class="title">Tesla Supercharger</div>
+    <h1 style="color: #888; font-size: 28px; font-family: 'Arial Black', sans-serif;">TESLA SUPERCHARGER</h1>
 
-    <!-- 검색창 -->
     <div class="search-container">
-        <input type="text" id="searchBox" placeholder="지역을 입력하세요">
-        <button class="clear-btn" id="clearSearch">&times;</button>
+        <input type="text" id="searchBox" placeholder="지역명을 입력하세요">
+        <button id="clearSearch">✖</button>
         <button id="searchButton">검색</button>
     </div>
 
-    <!-- 지도 -->
     <div id="map"></div>
-
-    <!-- 내 위치 버튼 -->
-    <button id="myLocationButton">📍</button>
+    <button class="gps-button" onclick="moveToCurrentLocation()">📍</button>
 
     <script>
         var map = new naver.maps.Map('map', {
-            center: new naver.maps.LatLng(37.5326, 126.9903), // 서울 용산구 중심
-            zoom: 12
+            center: new naver.maps.LatLng(37.5326, 126.9907), // 서울 용산구 중심
+            zoom: 13
         });
 
-        var allLocations = []; // 전체 데이터를 저장할 배열
-        var markers = []; // 생성된 마커들을 저장할 배열
-        var infoWindows = []; // 생성된 정보창들을 저장할 배열
+        var allLocations = [];
+        var markers = [];
 
         function loadMarkers(locations) {
-            markers.forEach(marker => marker.setMap(null)); // 기존 마커 삭제
+            markers.forEach(marker => marker.setMap(null));
             markers = [];
-            infoWindows = [];
 
             locations.forEach(location => {
                 var marker = new naver.maps.Marker({
@@ -150,35 +116,30 @@
                 });
 
                 var infoWindow = new naver.maps.InfoWindow({
-                    content: `<div style="padding:10px; font-size:14px;">
+                    content: `<div class="info-box">
                                 <strong>${location.title}</strong><br>
                                 📍 <b>주소:</b> ${location.address}<br>
                                 🏬 <b>위치:</b> ${location.location}<br>
-                                💰 <b>주차요금:</b> ${location.fee ? location.fee : '정보 없음'}<br>
-                                <div class="nav-buttons">
-                                    <a href="tmap://route?goalx=${location.longitude}&goaly=${location.latitude}" target="_blank">T맵</a>
-                                    <a href="kakaomap://route?sp=${userLat},${userLng}&ep=${location.latitude},${location.longitude}&by=car" target="_blank">카카오내비</a>
+                                💰 <b>주차요금:</b> ${location.fee || '정보 없음'}<br>
+                                <div class="navi-buttons">
+                                    <a class="navi-tmap" href="#" onclick="launchNavi('tmap', ${location.latitude}, ${location.longitude})">🚗 티맵</a>
+                                    <a class="navi-kakao" href="#" onclick="launchNavi('kakao', ${location.latitude}, ${location.longitude})">🚗 카카오네비</a>
                                 </div>
                               </div>`
                 });
 
                 naver.maps.Event.addListener(marker, "click", function () {
-                    infoWindows.forEach(win => win.close());
-                    infoWindow.open(map, marker);
+                    if (infoWindow.getMap()) {
+                        infoWindow.close();
+                    } else {
+                        infoWindow.open(map, marker);
+                    }
                 });
 
                 markers.push(marker);
-                infoWindows.push(infoWindow);
             });
-
-            if (locations.length > 0) {
-                var bounds = new naver.maps.LatLngBounds();
-                locations.forEach(location => bounds.extend(new naver.maps.LatLng(location.latitude, location.longitude)));
-                map.fitBounds(bounds);
-            }
         }
 
-        // JSON 데이터 로드
         fetch("https://qkrwodyd77.github.io/supercharger/superchargers.json")
             .then(response => response.json())
             .then(locations => {
@@ -187,45 +148,71 @@
             })
             .catch(error => console.error("JSON 데이터 로드 실패:", error));
 
-        // 검색 기능
         function searchLocations() {
             var query = document.getElementById("searchBox").value.trim();
 
             if (query === "") {
-                map.setCenter(new naver.maps.LatLng(37.5326, 126.9903)); // 서울 중심
-                map.setZoom(12);
+                map.setCenter(new naver.maps.LatLng(37.5326, 126.9907));
+                map.setZoom(13);
                 loadMarkers(allLocations);
             } else {
                 var filteredLocations = allLocations.filter(location =>
                     location.title.includes(query) || location.address.includes(query)
                 );
+
+                if (filteredLocations.length > 0) {
+                    var firstLocation = filteredLocations[0];
+                    map.setCenter(new naver.maps.LatLng(firstLocation.latitude, firstLocation.longitude));
+                    map.setZoom(14);
+                }
+
                 loadMarkers(filteredLocations);
             }
         }
 
-        // 검색 버튼 이벤트
         document.getElementById("searchButton").addEventListener("click", searchLocations);
-        document.getElementById("searchBox").addEventListener("keyup", function(event) {
-            if (event.key === "Enter") searchLocations();
+        document.getElementById("searchBox").addEventListener("keypress", function (e) {
+            if (e.key === "Enter") searchLocations();
         });
 
-        // X 버튼 이벤트
-        document.getElementById("clearSearch").addEventListener("click", function() {
+        document.getElementById("clearSearch").addEventListener("click", function () {
             document.getElementById("searchBox").value = "";
-            searchLocations();
+            map.setCenter(new naver.maps.LatLng(37.5326, 126.9907));
+            map.setZoom(13);
+            loadMarkers(allLocations);
         });
 
-        // 내 위치 찾기 버튼 이벤트
-        document.getElementById("myLocationButton").addEventListener("click", function() {
+        function moveToCurrentLocation() {
             if (navigator.geolocation) {
-                navigator.geolocation.getCurrentPosition(function(position) {
+                navigator.geolocation.getCurrentPosition(function (position) {
                     var lat = position.coords.latitude;
                     var lng = position.coords.longitude;
                     map.setCenter(new naver.maps.LatLng(lat, lng));
-                    map.setZoom(15);
+                    map.setZoom(14);
+                }, function () {
+                    alert("위치 정보를 가져올 수 없습니다.");
                 });
+            } else {
+                alert("이 브라우저에서는 위치 정보를 지원하지 않습니다.");
             }
-        });
+        }
+
+        function launchNavi(app, lat, lng) {
+            if (!isMobile()) {
+                alert("모바일 기기에서만 사용 가능합니다.");
+                return;
+            }
+
+            if (app === "tmap") {
+                window.location.href = `tmap://route?goalx=${lng}&goaly=${lat}`;
+            } else if (app === "kakao") {
+                window.location.href = `kakaomap://route?ep=${lat},${lng}`;
+            }
+        }
+
+        function isMobile() {
+            return /iPhone|iPad|iPod|Android/i.test(navigator.userAgent);
+        }
     </script>
 
 </body>
