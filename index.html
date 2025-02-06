@@ -13,28 +13,26 @@
 
         /* 검색창 컨테이너 */
         #searchContainer {
-            display: flex;
-            justify-content: center;
+            position: relative;
+            display: inline-flex;
             align-items: center;
             margin-bottom: 10px;
         }
 
         /* 검색 입력창 */
         #searchBox {
-            padding: 8px 35px 8px 10px; /* 내부 여백 조정 (오른쪽 X 버튼 자리 확보) */
+            padding: 8px 35px 8px 10px;
             width: 250px;
             font-size: 14px;
             border: 1px solid #ccc;
             border-radius: 5px;
-            position: relative;
+            outline: none;
         }
 
-        /* X 버튼 (검색창 내부 우측 끝에 위치) */
+        /* X 버튼 (검색창 내부) */
         #clearButton {
             position: absolute;
-            right: 38px; /* 검색창 내부 오른쪽 끝에 위치 */
-            top: 50%;
-            transform: translateY(-50%);
+            right: 35px;
             background: none;
             border: none;
             cursor: pointer;
@@ -55,10 +53,19 @@
             margin-left: 5px;
         }
 
-        /* X 버튼이 검색창 내부에 배치되도록 input을 감싼 div */
-        .searchBoxWrapper {
-            position: relative;
-            display: inline-block;
+        /* 내 위치 버튼 */
+        #gpsButton {
+            position: absolute;
+            top: 10px;
+            right: 10px;
+            padding: 8px 12px;
+            background: #007aff;
+            color: white;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            font-size: 14px;
+            z-index: 1000;
         }
     </style>
 </head>
@@ -68,34 +75,43 @@
     <div class="subtitle">지도에서 수퍼차저를 클릭하면 상세 정보를 확인할 수 있습니다.</div>
 
     <div id="searchContainer">
-        <div class="searchBoxWrapper">
-            <input type="text" id="searchBox" placeholder="지역명 또는 상호 검색" oninput="toggleClearButton()" onkeypress="handleEnter(event)">
-            <button id="clearButton" onclick="clearSearch()">×</button>
-        </div>
+        <input type="text" id="searchBox" placeholder="지역명 또는 상호 검색" oninput="toggleClearButton()" onkeypress="handleEnter(event)">
+        <button id="clearButton" onclick="clearSearch()">×</button>
         <button id="searchButton" onclick="searchLocations()">검색</button>
     </div>
+
+    <button id="gpsButton" onclick="moveToCurrentLocation()">📍 내 위치</button>
 
     <div id="map"></div>
 
     <script>
-        var map = new naver.maps.Map('map', {
-            center: new naver.maps.LatLng(36.5, 127.5), // 대한민국 중심 좌표
-            zoom: 7
-        });
+        var map;
+        var userMarker;
+        var allLocations = [];
+        var markers = [];
+        var infoWindows = [];
 
-        var allLocations = []; // 전체 데이터를 저장할 배열
-        var markers = []; // 마커 목록
-        var infoWindows = []; // 정보창 목록
+        function initMap() {
+            map = new naver.maps.Map('map', {
+                center: new naver.maps.LatLng(36.5, 127.5),
+                zoom: 7
+            });
 
-        // JSON 데이터 로드 및 마커 표시 함수
+            fetch("https://qkrwodyd77.github.io/supercharger/superchargers.json")
+                .then(response => response.json())
+                .then(locations => {
+                    allLocations = locations;
+                    loadMarkers(allLocations);
+                })
+                .catch(error => console.error("JSON 데이터 로드 실패:", error));
+        }
+
         function loadMarkers(locations, zoomLevel = 7, center = new naver.maps.LatLng(36.5, 127.5)) {
-            // 기존 마커 및 말풍선 초기화
             markers.forEach(marker => marker.setMap(null));
             infoWindows.forEach(infoWindow => infoWindow.close());
             markers = [];
             infoWindows = [];
 
-            // 지도 줌 및 중심 설정
             map.setZoom(zoomLevel);
             map.setCenter(center);
 
@@ -119,7 +135,7 @@
                     if (infoWindow.getMap()) {
                         infoWindow.close();
                     } else {
-                        infoWindows.forEach(win => win.close()); // 다른 말풍선 닫기
+                        infoWindows.forEach(win => win.close());
                         infoWindow.open(map, marker);
                     }
                 });
@@ -129,30 +145,18 @@
             });
         }
 
-        // JSON 데이터 로드
-        fetch("https://qkrwodyd77.github.io/supercharger/superchargers.json")
-            .then(response => response.json())
-            .then(locations => {
-                allLocations = locations; // 전체 데이터 저장
-                loadMarkers(allLocations);
-            })
-            .catch(error => console.error("JSON 데이터 로드 실패:", error));
-
-        // 검색 기능 추가
         function searchLocations() {
             var query = document.getElementById("searchBox").value.trim();
 
             if (query === "") {
-                // 검색창이 비어 있으면 전국으로 복귀
                 loadMarkers(allLocations);
             } else {
-                // 검색어 필터링
                 var filteredLocations = allLocations.filter(location =>
                     location.title.includes(query) || location.address.includes(query)
                 );
 
                 if (filteredLocations.length > 0) {
-                    var firstLocation = filteredLocations[0]; // 첫 번째 검색 결과 기준으로 지도 이동
+                    var firstLocation = filteredLocations[0];
                     loadMarkers(filteredLocations, 12, new naver.maps.LatLng(firstLocation.latitude, firstLocation.longitude));
                 } else {
                     alert("검색 결과가 없습니다.");
@@ -160,31 +164,56 @@
             }
         }
 
-        // 🔹 검색창 X 버튼 표시 여부
         function toggleClearButton() {
             var searchBox = document.getElementById("searchBox");
             var clearButton = document.getElementById("clearButton");
 
-            if (searchBox.value.length > 0) {
-                clearButton.style.display = "inline";
-            } else {
-                clearButton.style.display = "none";
-            }
+            clearButton.style.display = searchBox.value.length > 0 ? "inline" : "none";
         }
 
-        // 🔹 검색창 X 버튼 클릭 시 초기화
         function clearSearch() {
             document.getElementById("searchBox").value = "";
-            toggleClearButton(); // X 버튼 숨김
-            searchLocations(); // 전국 마커 다시 표시
+            toggleClearButton();
+            searchLocations();
         }
 
-        // 🔹 Enter 키 입력 시 검색 실행
         function handleEnter(event) {
             if (event.key === "Enter") {
                 searchLocations();
             }
         }
+
+        function moveToCurrentLocation() {
+            if (navigator.geolocation) {
+                navigator.geolocation.getCurrentPosition(function (position) {
+                    var userLatLng = new naver.maps.LatLng(position.coords.latitude, position.coords.longitude);
+
+                    map.setCenter(userLatLng);
+                    map.setZoom(12);
+
+                    if (userMarker) {
+                        userMarker.setMap(null);
+                    }
+
+                    userMarker = new naver.maps.Marker({
+                        position: userLatLng,
+                        map: map,
+                        icon: {
+                            url: "https://maps.google.com/mapfiles/ms/icons/blue-dot.png",
+                            size: new naver.maps.Size(32, 32),
+                            origin: new naver.maps.Point(0, 0),
+                            anchor: new naver.maps.Point(16, 16)
+                        }
+                    });
+                }, function () {
+                    alert("위치 정보를 가져올 수 없습니다.");
+                });
+            } else {
+                alert("이 브라우저에서는 위치 정보를 지원하지 않습니다.");
+            }
+        }
+
+        window.onload = initMap;
     </script>
 
 </body>
