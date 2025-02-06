@@ -1,802 +1,1122 @@
 [
-    {
+   {
         "title": "강남 그랜드 인터콘티넨탈",
         "address": "서울특별시 강남구 테헤란로 521",
-        "location": "지하 4층 48번 구역"
+        "location": "지하 4층 48번 구역",
+        "latitude": 37.5095450,
+        "longitude": 127.0608688
     },
     {
         "title": "천안 대명리조트",
         "address": "충청남도 천안시 동남구 성남면 종합휴향지로 200",
-        "location": "대명 콘도, 야외 주차장 이설 "
+        "location": "대명 콘도, 야외 주차장 이설",
+        "latitude": 36.757227,
+        "longitude": 127.223525
     },
     {
-        "title": "종로 그랑 서울 ",
-        "address": "서울특별시 종로구 종로 33 ",
-        "location": "지하 6층 24번 기둥 옆"
+        "title": "종로 그랑 서울",
+        "address": "서울특별시 종로구 종로 33",
+        "location": "지하 6층 24번 기둥 옆",
+        "latitude": 37.5709600,
+        "longitude": 126.9814392
     },
     {
-        "title": "여의도 IFC 몰 / 콘래드 서울 호텔 ",
-        "address": "서울특별시 영등포구 국제금융로 10 IFC몰 ",
-        "location": "지하 7층 64구역"
+        "title": "여의도 IFC 몰 / 콘래드 서울 호텔",
+        "address": "서울특별시 영등포구 국제금융로 10 IFC몰",
+        "location": "지하 7층 64구역",
+        "latitude": 37.5255723,
+        "longitude": 126.9266142
     },
     {
         "title": "대구 엑스코",
         "address": "대구광역시 북구 유통단지로 90",
-        "location": "지하 1층, 제 2주차장12A 구역"
+        "location": "지하 1층, 제 2주차장12A 구역",
+        "latitude": 35.9086772,
+        "longitude": 128.6113547
     },
     {
         "title": "원주 오크밸리",
-        "address": "강원도 원주시 지정면 오크밸리 1길 66 ",
-        "location": "골프빌리지 콘도, A동 주차장"
+        "address": "강원도 원주시 지정면 오크밸리 1길 66",
+        "location": "골프빌리지 콘도, A동 주차장",
+        "latitude": 37.4343237,
+        "longitude": 127.8175128
     },
     {
         "title": "부산 파라다이스 호텔",
         "address": "부산광역시 해운대구 해운대해변로 296",
-        "location": "카지노 건물 앞, 옥외 주차장"
+        "location": "카지노 건물 앞, 옥외 주차장",
+        "latitude": 35.1599249,
+        "longitude": 129.1641055
     },
     {
         "title": "속초 롯데리조트",
         "address": "강원도 속초시 대포항길 186",
-        "location": "지하 3층 A13 구역"
+        "location": "지하 3층 A13 구역",
+        "latitude": 38.1806437,
+        "longitude": 128.6130473
     },
     {
         "title": "잠실 롯데월드타워",
         "address": "서울특별시 송파구 올림픽로 300",
-        "location": "지하 3층 N3, M3 구역"
+        "location": "지하 3층 N3, M3 구역",
+        "latitude": 37.5125702,
+        "longitude": 127.1025625
     },
     {
         "title": "광주 홀리데이인 호텔",
         "address": "광주광역시 서구 상무누리로 55",
-        "location": "지하 1층"
+        "location": "지하 1층",
+        "latitude": 35.1475597,
+        "longitude": 126.8381143
     },
     {
         "title": "강릉 라카이 샌드파인 리조트",
         "address": "강원도 강릉시 해안로 536",
-        "location": "지하 2층, K7, K8 구역"
+        "location": "지하 2층, K7, K8 구역",
+        "latitude": 37.8061803,
+        "longitude": 128.9045032
     },
     {
         "title": "판교테크노밸리 디테라스",
         "address": "경기도 성남시 분당구 판교로319번길 13",
-        "location": "지상 4층 C06 구역"
+        "location": "지상 4층 C06 구역",
+        "latitude": 37.4036874,
+        "longitude": 127.1090545
     },
     {
         "title": "용산 그랜드 하얏트 호텔 서울",
         "address": "서울특별시 용산구 소월로 322",
-        "location": "지하 2층"
+        "location": "지하 2층",
+        "latitude": 37.5396014,
+        "longitude": 126.9974521
     },
     {
         "title": "제주 롯데호텔",
         "address": "제주특별자치도 서귀포시 중문관광로72번길 35",
-        "location": "야외 주차장 공공충전기 옆"
+        "location": "야외 주차장 공공충전기 옆",
+        "latitude": 33.2486874,
+        "longitude": 126.4105140
     },
     {
         "title": "고양 소노캄 호텔",
         "address": "경기도 고양시 일산동구 태극로 20 엠블호텔",
-        "location": "지하 3층"
+        "location": "지하 3층",
+        "latitude": 37.6619268,
+        "longitude": 126.7507528
     },
     {
         "title": "수원 롯데몰",
         "address": "경기도 수원시 권선구 세화로 134 롯데몰수원",
-        "location": "지하 2층"
+        "location": "지하 2층",
+        "latitude": 37.2642500,
+        "longitude": 126.9972174
     },
     {
-        "title": "진주 롯데몰 ",
+        "title": "진주 롯데몰",
         "address": "경상남도 진주시 동진로 440 진주 롯데몰",
-        "location": "지하 2층"
+        "location": "지하 2층",
+        "latitude": 35.1801018,
+        "longitude": 128.1398589
     },
     {
         "title": "상주 연꽃 참 한우",
         "address": "경상북도 상주시 공검면 경상대로 4207",
-        "location": "야외 주차장"
+        "location": "야외 주차장",
+        "latitude": 36.5159043,
+        "longitude": 128.1633691
     },
     {
         "title": "신탄진 대덕 패션 타운",
         "address": "대전광역시 대덕구 상서동 396-3 / 신탄진로 490",
-        "location": "야외 주차장 "
-    },
+        "location": "야외 주차장",
+        "latitude": 36.4232790,
+        "longitude": 127.4198480
+    }
     {
         "title": "논산 라온빌리지",
         "address": "충청남도 논산시 연무읍 동산리 86-2 /동안로1113번길 40",
-        "location": "야외 주차장 "
+        "location": "야외 주차장",
+        "latitude": 36.1284830,
+        "longitude": 127.1303012
     },
     {
         "title": "함양 타이어 하우스",
         "address": "경상남도 함양군 함양읍 고운로 298",
-        "location": "야외 주차장 "
+        "location": "야외 주차장",
+        "latitude": 35.5247725,
+        "longitude": 127.7529497
     },
     {
         "title": "군산 GS 칼택스 샛별주유소",
-        "address": "전라북도 군산시 대야면 번영로 1321 ",
-        "location": "야외 주차장 "
+        "address": "전라북도 군산시 대야면 번영로 1321",
+        "location": "야외 주차장",
+        "latitude": 35.9371985,
+        "longitude": 126.8559330
     },
     {
-        "title": "압구정 안다즈 호텔 ",
+        "title": "압구정 안다즈 호텔",
         "address": "서울특별시 강남구 논현로 854",
-        "location": "지하 4층 "
+        "location": "지하 4층",
+        "latitude": 37.5253216,
+        "longitude": 127.0288651
     },
     {
         "title": "분당 CGV 스퀘어",
         "address": "경기도 성남시 분당구 탄천상로 151번길 20 월드쇼핑",
-        "location": "지하 4층 "
+        "location": "지하 4층",
+        "latitude": 37.3403273,
+        "longitude": 127.1068142
     },
     {
         "title": "강서 김포 롯데몰",
         "address": "서울특별시 강서구 하늘길 38",
-        "location": "지하 1층 "
+        "location": "지하 1층",
+        "latitude": 37.5713698,
+        "longitude": 126.8029604
     },
     {
         "title": "당진 커피란 앤 워시",
-        "address": "충청남도 당진시 송악읍 가학리 590-3번지 ",
-        "location": "야외 주차장"
+        "address": "충청남도 당진시 송악읍 가학리 590-3번지",
+        "location": "야외 주차장",
+        "latitude": 36.9095846,
+        "longitude": 126.6940577
     },
     {
-        "title": "가평 거라지 스튜디오 ",
-        "address": "경기도 가평군 설악면 미사리로 3 ",
-        "location": "야외 주차장"
+        "title": "가평 거라지 스튜디오",
+        "address": "경기도 가평군 설악면 미사리로 3",
+        "location": "야외 주차장",
+        "latitude": 37.6863909,
+        "longitude": 127.4935237
     },
     {
         "title": "부산 남구 IFC",
-        "address": "부산광역시 남구 전포대로 133 (문현동) ",
-        "location": "지하 "
+        "address": "부산광역시 남구 전포대로 133 (문현동)",
+        "location": "지하",
+        "latitude": 35.1482643,
+        "longitude": 129.0654411
     },
     {
         "title": "부산 강서 대저쉼터",
         "address": "부산광역시 강서구 대저 1동 361-38",
-        "location": "야외 주차장 "
+        "location": "야외 주차장",
+        "latitude": 35.2197993,
+        "longitude": 128.9906784
     },
     {
         "title": "부산 연제 테슬라 센터",
         "address": "부산광역시 연제구 좌수영로 290",
-        "location": "지하 "
+        "location": "지하",
+        "latitude": 35.1883647,
+        "longitude": 129.1100679
     },
     {
         "title": "인천 송도 트리플 스트리트",
         "address": "인천광역시 연수구 송도과학로 16번길 33-4",
-        "location": "지하 "
+        "location": "지하",
+        "latitude": 37.3786561,
+        "longitude": 126.6628323
     },
     {
-        "title": "경기 하남 스타필드 ",
+        "title": "경기 하남 스타필드",
         "address": "경기도 하남시 미사대로 750",
-        "location": "지상 4층 "
+        "location": "지상 4층",
+        "latitude": 37.5454628,
+        "longitude": 127.2238404
     },
     {
-        "title": "강남 N 타워 ",
+        "title": "강남 N 타워",
         "address": "서울특별시 강남구 테헤란로 129",
-        "location": "지하 4층 "
+        "location": "지하 4층",
+        "latitude": 37.4999326,
+        "longitude": 127.0323679
     },
     {
         "title": "일산 N2WASH",
         "address": "경기도 고양시 일산동구 장항로 31",
-        "location": "야외 주차장 "
+        "location": "야외 주차장",
+        "latitude": 37.6297365,
+        "longitude": 126.7907219
     },
     {
         "title": "여주 신세계프리미엄 아울렛",
         "address": "경기도 여주시 명품로 360",
-        "location": "야외 주차장 B구역 (EAST 동 앞쪽)"
+        "location": "야외 주차장 B구역 (EAST 동 앞쪽)",
+        "latitude": 37.2458827,
+        "longitude": 127.6122784
     },
     {
         "title": "기흥 롯데프리미엄 아울렛",
         "address": "경기도 용인시 기흥구 신고매로 124",
-        "location": "지하 3층 A5 구역"
+        "location": "지하 3층 A5 구역",
+        "latitude": 37.2254182,
+        "longitude": 127.1209576
     },
     {
         "title": "충주 홈마트",
         "address": "충청북도 충주시 대소원면 기업도시로 26",
-        "location": "야외 주차장 "
+        "location": "야외 주차장",
+        "latitude": 37.0010829,
+        "longitude": 127.8351726
     },
     {
         "title": "화성 발안 대야에너지",
         "address": "경기도 화성시 향남읍 서해로 806",
-        "location": "야외 주차장 "
+        "location": "야외 주차장",
+        "latitude": 37.1336752,
+        "longitude": 126.8962960
     },
     {
         "title": "진천 만나CEA",
         "address": "충청북도 진천군 이월면 나천리 602-1",
-        "location": "야외 주차장 "
-    },
-    {
+        "location": "야외 주차장",
+        "latitude": 36.921887,
+        "longitude": 127.433652
+    }
+ {
         "title": "구로 지타워",
         "address": "서울특별시 구로구 디지털로 26길 38",
-        "location": "지하 4층"
+        "location": "지하 4층",
+        "latitude": 37.4798724,
+        "longitude": 126.8953622
     },
     {
         "title": "왕십리 비트플렉스",
         "address": "서울특별시 성동구 왕십리광장로 17",
-        "location": "지상 5층"
+        "location": "지상 5층",
+        "latitude": 37.5614086,
+        "longitude": 127.0384812
     },
     {
         "title": "순천 호수공원 외식타운",
         "address": "전라남도 순천시 조례동 641",
-        "location": "야외 주차장"
+        "location": "야외 주차장",
+        "latitude": 34.9629024,
+        "longitude": 127.5254093
     },
     {
         "title": "롯데아울렛 이시아폴리스점",
         "address": "대구광역시 동구 팔공로49길 16",
-        "location": "야외 주차장"
+        "location": "야외 주차장",
+        "latitude": 35.9215653,
+        "longitude": 128.6373487
     },
     {
         "title": "센터필드",
         "address": "서울특별시 강남구 테헤란로 231",
-        "location": "지하 5층"
+        "location": "지하 5층",
+        "latitude": 37.5028813,
+        "longitude": 127.0413566
     },
     {
         "title": "서초 쌍용플래티넘",
         "address": "서울특별시 서초구 서초중앙로 18",
-        "location": "지하 2층"
+        "location": "지하 2층",
+        "latitude": 37.4840586,
+        "longitude": 127.0173602
     },
     {
         "title": "동탄 롯데백화점",
-        "address": "경기도 화성시 동탄역로 160 ",
-        "location": "지하 4층"
+        "address": "경기도 화성시 동탄역로 160",
+        "location": "지하 4층",
+        "latitude": 37.2006675,
+        "longitude": 127.0982031
     },
     {
         "title": "롯데프리미엄아울렛 타임빌라스",
         "address": "경기도 의왕시 바라산로 1",
-        "location": "지하 1층"
+        "location": "지하 1층",
+        "latitude": 37.3756835,
+        "longitude": 127.0095411
     },
     {
         "title": "강북 파라스파라",
         "address": "서울특별시 강북구 삼양로 689",
-        "location": "지상 1층, R층"
+        "location": "지상 1층, R층",
+        "latitude": 37.6649461,
+        "longitude": 127.0076861
     },
     {
         "title": "송파 소피텔",
         "address": "서울특별시 송파구 잠실로 209",
-        "location": "지하 4층"
+        "location": "지하 4층",
+        "latitude": 37.5138710,
+        "longitude": 127.1063644
     },
     {
         "title": "엘리웨이 인천",
         "address": "인천광역시 미추홀구 숙골로 88번길 12",
-        "location": "지하 4층"
+        "location": "지하 4층",
+        "latitude": 37.4702444,
+        "longitude": 126.6652006
     },
     {
         "title": "더 스탈릿",
         "address": "인천광역시 연수구 아암대로 825-25",
-        "location": "야외 주차장"
+        "location": "야외 주차장",
+        "latitude": 37.3962818,
+        "longitude": 126.6632240
     },
     {
         "title": "광명 유플래닛",
         "address": "경기도 광명시 양지로 7 유플래닛 광명",
-        "location": "지하 5층"
+        "location": "지하 5층",
+        "latitude": 37.4188404,
+        "longitude": 126.8820033
     },
     {
         "title": "휘닉스 평창",
         "address": "강원도 평창군 봉평면 태기로 174",
-        "location": "야외 주차장"
+        "location": "야외 주차장",
+        "latitude": 37.5813901,
+        "longitude": 128.3273099
     },
     {
         "title": "테슬라 제주스토어",
         "address": "제주특별자치도 제주시 연삼로 136",
-        "location": "야외 주차장"
+        "location": "야외 주차장",
+        "latitude": 33.4926738,
+        "longitude": 126.5068656
     },
     {
         "title": "광교법원주차장",
         "address": "경기도 수원시 영통구 법조로149번길 269",
-        "location": "지상 3층"
+        "location": "지상 3층",
+        "latitude": 37.2934098,
+        "longitude": 127.0701561
     },
     {
         "title": "CGV평촌",
         "address": "경기도 안양시 동안구 관평로170번길 33",
-        "location": "지상 7층"
+        "location": "지상 7층",
+        "latitude": 37.3930077,
+        "longitude": 126.9622757
     },
     {
         "title": "롯데백화점 청량리점",
         "address": "서울특별시 동대문구 왕산로 214",
-        "location": "지상 M5층"
+        "location": "지상 M5층",
+        "latitude": 37.5841971,
+        "longitude": 127.0511390
     },
     {
         "title": "히든베이호텔",
         "address": "전라남도 여수시 신월로 496-25",
-        "location": "지상 주차장"
+        "location": "지상 주차장",
+        "latitude": 34.7215132,
+        "longitude": 127.6988458
     },
     {
         "title": "롯데백화점 대전점",
-        "address": "대전광역시 서구 계룡로 598 ",
-        "location": "지하 4층"
-    },
-    {
+        "address": "대전광역시 서구 계룡로 598",
+        "location": "지하 4층",
+        "latitude": 36.3406299,
+        "longitude": 127.3895541
+    }
+  {
         "title": "블루에너지",
         "address": "경기도 평택시 청원로 1409",
-        "location": "야외 주차장"
+        "location": "야외 주차장",
+        "latitude": 37.0525941,
+        "longitude": 127.0796230
     },
     {
         "title": "카림에비뉴 김포",
-        "address": "경기도 김포시 김포한강4로 487 카림애비뉴 김포",
-        "location": "지하 1층"
+        "address": "경기도 김포시 김포한강4로 487 카림에비뉴 김포",
+        "location": "지하 1층",
+        "latitude": 37.6463001,
+        "longitude": 126.6300872
     },
     {
         "title": "남제천 휴게소",
         "address": "충청북도 제천시 금성면 청풍호로 741 남제천 휴게소",
-        "location": "지상 주차장"
+        "location": "지상 주차장",
+        "latitude": 37.0722677,
+        "longitude": 128.1922213
     },
     {
         "title": "설해원 리조트",
         "address": "강원도 양양군 손양면 공항로 230 설해원 리조트",
-        "location": "지상 주차장 "
+        "location": "지상 주차장",
+        "latitude": 38.0555046,
+        "longitude": 128.6642352
     },
     {
         "title": "청라스퀘어7",
         "address": "인천광역시 서구 청라루비로 76 청라스퀘어7",
-        "location": "지하 2층"
+        "location": "지하 2층",
+        "latitude": 37.5322853,
+        "longitude": 126.6420996
     },
     {
         "title": "Gam1376 카페",
         "address": "경상북도 청도군 청도음 새마을로 1376 Gam1376 카페",
-        "location": "야외 주차장"
+        "location": "야외 주차장",
+        "latitude": 35.609696,
+        "longitude": 128.761693
     },
     {
         "title": "AK PLAZA 세종 패션관",
         "address": "세종특별자치시 다솜1로 20 KT&G 세종타워C",
-        "location": "지하 2층"
+        "location": "지하 2층",
+        "latitude": 36.5003122,
+        "longitude": 127.2566748
     },
     {
         "title": "롯데아울렛 부여점",
         "address": "충청남도 부여군 규암면 백제문로 387",
-        "location": "야외 주차장"
+        "location": "야외 주차장",
+        "latitude": 36.3072541,
+        "longitude": 126.9019084
     },
     {
         "title": "롯데아울렛 광교점",
         "address": "경기도 수원시 영통구 도청로 10",
-        "location": "지하 4층"
+        "location": "지하 4층",
+        "latitude": 37.2866697,
+        "longitude": 127.0554484
     },
     {
         "title": "판교테크원타워",
         "address": "경기도 성남시 분당구 백현동 534",
-        "location": "지하 2층"
+        "location": "지하 2층",
+        "latitude": 37.3954814,
+        "longitude": 127.1121408
     },
     {
         "title": "창원 엠포리움빌딩",
         "address": "경상남도 창원시 성산구 중앙대로 100번길 13",
-        "location": "지하 2층"
+        "location": "지하 2층",
+        "latitude": 35.2226606,
+        "longitude": 128.6814557
     },
     {
         "title": "이안스퀘어",
         "address": "충청북도 청주시 청원구 율량로 191",
-        "location": "지상 2층, 3층"
+        "location": "지상 2층, 3층",
+        "latitude": 36.6652895,
+        "longitude": 127.4992719
     },
     {
         "title": "포항 오토파크",
         "address": "경상북도 포항시 흥해읍 동해대로 878",
-        "location": "야외 주차장"
+        "location": "야외 주차장",
+        "latitude": 36.0590254,
+        "longitude": 129.3208162
     },
     {
         "title": "몰오브효자",
         "address": "전라북도 전주시 완산구 용머리로 45",
-        "location": "지하 2층"
+        "location": "지하 2층",
+        "latitude": 35.8068906,
+        "longitude": 127.1156286
     },
     {
         "title": "대구 수성아트스퀘어",
         "address": "대구광역시 수성구 수성못6길 18",
-        "location": "야외 주차장"
+        "location": "야외 주차장",
+        "latitude": 35.8270845,
+        "longitude": 128.6235599
     },
     {
         "title": "신사스퀘어",
         "address": "서울특별시 강남구 강남대로 652",
-        "location": "지하 3층"
+        "location": "지하 3층",
+        "latitude": 37.5196035,
+        "longitude": 127.0190762
     },
     {
         "title": "LF 스퀘어 광양",
         "address": "전라남도 광양시 순광로 466",
-        "location": "지상 2층"
-    },
+        "location": "지상 2층",
+        "latitude": 34.9625085,
+        "longitude": 127.5678273
+    }
     {
         "title": "에피소드 수유",
         "address": "서울특별시 강북구 도봉로 315",
-        "location": "지하 4층"
+        "location": "지하 4층",
+        "latitude": 37.6369286,
+        "longitude": 127.0233101
     },
     {
         "title": "CCMM",
         "address": "서울특별시 영등포구 여의공원로 101",
-        "location": "지하 6층"
+        "location": "지하 6층",
+        "latitude": 37.5292711,
+        "longitude": 126.9248993
     },
     {
         "title": "나인블럭 중대동점",
         "address": "경기도 광주시 경충대로 1967",
-        "location": "야외 주차장"
+        "location": "야외 주차장",
+        "latitude": 37.4034126,
+        "longitude": 127.2234946
     },
     {
         "title": "광주 다운타운시너지(보이저 첨단)",
         "address": "광주광역시 광산구 임방울대로826번길 19-20",
-        "location": "옥상 주차장"
+        "location": "옥상 주차장",
+        "latitude": 35.2163757,
+        "longitude": 126.8494974
     },
     {
         "title": "타임스트림 신림",
         "address": "서울특별시 관악구 신림로 330",
-        "location": "지하 6층"
+        "location": "지하 6층",
+        "latitude": 37.4838598,
+        "longitude": 126.9302425
     },
     {
         "title": "롯데백화점 잠실",
         "address": "서울특별시 송파구 올림픽로 240",
-        "location": "지하 3층"
+        "location": "지하 3층",
+        "latitude": 37.5110794,
+        "longitude": 127.0981638
     },
     {
         "title": "안성축협",
         "address": "경기도 안성시 안성맞춤대로 833",
-        "location": "야외 주차장"
+        "location": "야외 주차장",
+        "latitude": 36.9887938,
+        "longitude": 127.2679284
     },
     {
         "title": "카카오 판교 아지트",
         "address": "경기도 성남시 분당구 판교역로 166",
-        "location": "지하 2층"
+        "location": "지하 2층",
+        "latitude": 37.3954797,
+        "longitude": 127.1103817
     },
     {
         "title": "춘천 NH 타운",
         "address": "강원도 춘천시 후석로 120",
-        "location": "지하 2층"
+        "location": "지하 2층",
+        "latitude": 37.8633018,
+        "longitude": 127.7482199
     },
     {
         "title": "경주 라한호텔",
         "address": "경상북도 경주시 보문로 338",
-        "location": "야외 주차장"
+        "location": "야외 주차장",
+        "latitude": 35.8505236,
+        "longitude": 129.2766522
     },
     {
         "title": "롯데백화점 중동점",
         "address": "경기도 부천시 길주로 300",
-        "location": "지하 4층"
+        "location": "지하 4층",
+        "latitude": 37.5025219,
+        "longitude": 126.7754161
     },
     {
         "title": "오슬로파크",
         "address": "경상남도 양산시 물금읍 범구로 14",
-        "location": "지하 2층"
+        "location": "지하 2층",
+        "latitude": 35.3272952,
+        "longitude": 129.0119552
     },
     {
         "title": "롯데프리미엄아울렛 동부산점",
         "address": "부산광역시 기장군 기장읍 기장해안로 147",
-        "location": "야외 주차장"
+        "location": "야외 주차장",
+        "latitude": 35.1921607,
+        "longitude": 129.2127177
     },
     {
         "title": "롯대백화점 센텀시티점",
         "address": "부산광역시 해운대구 센텀남대로 59",
-        "location": "지하 5층"
+        "location": "지하 5층",
+        "latitude": 35.1698533,
+        "longitude": 129.1310696
     },
     {
         "title": "인제스피디움",
         "address": "강원도 인제군 기린면 상하답로 130",
-        "location": "야외 주차장"
+        "location": "야외 주차장",
+        "latitude": 38.0026762,
+        "longitude": 128.2951483
     },
     {
         "title": "진교면공영주차장",
         "address": "경상남도 하동군 하동읍 군청로 23",
-        "location": "야외 주차장"
+        "location": "야외 주차장",
+        "latitude": 35.0673330,
+        "longitude": 127.7512750
     },
     {
         "title": "모다아울렛 충주점",
         "address": "충청북도 충주시 중원대로 3683",
-        "location": "지상 1층"
+        "location": "지상 1층",
+        "latitude": 36.9615074,
+        "longitude": 127.8981977
     },
     {
         "title": "모다아울렛 남양주구리점",
         "address": "경기도 구리시 경춘북로 230",
-        "location": "지상 6층"
+        "location": "지상 6층",
+        "latitude": 37.6333474,
+        "longitude": 127.1159270
     },
     {
         "title": "모다아울렛 김천구미점",
         "address": "경상북도 김천시 아포읍 아포대로 1417",
-        "location": "지상 1층"
-    },
+        "location": "지상 1층",
+        "latitude": 36.1546015,
+        "longitude": 128.2818763
+    }
     {
         "title": "커피명당",
         "address": "경기도 고양시 덕양구 도내동 447-9",
-        "location": "야외 주차장"
+        "location": "야외 주차장",
+        "latitude": 37.6329912,
+        "longitude": 126.8646202
     },
     {
         "title": "금천 마리오아울렛",
         "address": "서울특별시 금천구 디지털로 185",
-        "location": "지하 3층"
+        "location": "지하 3층",
+        "latitude": 37.4781363,
+        "longitude": 126.8871333
     },
     {
         "title": "한화리조트 설악(워터피아)",
         "address": "강원도 속초시 미시령로 2983번길 111",
-        "location": "야외 주차장"
+        "location": "야외 주차장",
+        "latitude": 38.2106436,
+        "longitude": 128.5284588
     },
     {
         "title": "농심호텔",
         "address": "부산광역시 동래구 금강공원로 20번길 23",
-        "location": "옥상 주차장"
+        "location": "옥상 주차장",
+        "latitude": 35.2202068,
+        "longitude": 129.0822819
     },
     {
         "title": "D타워서울포레스트",
         "address": "서울특별시 성동구 왕십리로 83-21",
-        "location": "지하 5층"
+        "location": "지하 5층",
+        "latitude": 37.5441547,
+        "longitude": 127.0433577
     },
     {
         "title": "세종 JB",
         "address": "세종특별자치시 종합운동장로 29",
-        "location": "야외 주차장"
+        "location": "야외 주차장",
+        "latitude": 36.4690625,
+        "longitude": 127.2683184
     },
     {
         "title": "임실 치즈 테마파크",
         "address": "전라북도 임실군 성수면 도인2길 50",
-        "location": "야외 주차장"
+        "location": "야외 주차장",
+        "latitude": 35.6331200,
+        "longitude": 127.3012736
     },
     {
         "title": "테라로사",
         "address": "강원도 강릉시 구정면 현천길 25",
-        "location": "야외 주차장"
+        "location": "야외 주차장",
+        "latitude": 37.6960846,
+        "longitude": 128.8918603
     },
     {
         "title": "포르모큐브",
         "address": "전라남도 목포시 옥암로 95",
-        "location": "지하 2층"
+        "location": "지하 2층",
+        "latitude": 34.8073337,
+        "longitude": 126.4254379
     },
     {
         "title": "중앙교회",
-        "address": "충청남도 천안시 서북구 부대중앙길 27-1 ",
-        "location": "야외 주차장"
+        "address": "충청남도 천안시 서북구 부대중앙길 27-1",
+        "location": "야외 주차장",
+        "latitude": 36.8415094,
+        "longitude": 127.1488138
     },
     {
         "title": "오션투유리조트",
         "address": "강원도 고성군 죽왕면 삼포해변길 9",
-        "location": "야외 주차장"
+        "location": "야외 주차장",
+        "latitude": 38.3168583,
+        "longitude": 128.5310625
     },
     {
         "title": "뮌스터담",
         "address": "경기도 파주시 운정로 113-175",
-        "location": "야외 주차장"
+        "location": "야외 주차장",
+        "latitude": 37.7267741,
+        "longitude": 126.7841253
     },
     {
         "title": "AK PLAZA 금정",
         "address": "경기도 군포시 엘에스로 143",
-        "location": "지하 2층"
+        "location": "지하 2층",
+        "latitude": 37.3726348,
+        "longitude": 126.9445261
     },
     {
         "title": "원마운트",
         "address": "경기도 고양시 일산서구 한류월드로 300",
-        "location": "지하 2층"
+        "location": "지하 2층",
+        "latitude": 37.6645742,
+        "longitude": 126.7545357
     },
     {
         "title": "그랜드하얏트 인천 웨스트/이스트타워",
         "address": "인천광역시 중구 영종해안남로 321번길 208",
-        "location": "지하 2층"
+        "location": "지하 2층",
+        "latitude": 37.4405294,
+        "longitude": 126.4575405
     },
     {
         "title": "세인트존스호텔",
         "address": "강원도 강릉시 창해로 307",
-        "location": "야외 주차장"
+        "location": "야외 주차장",
+        "latitude": 37.7912807,
+        "longitude": 128.9209314
     },
     {
         "title": "원더풀주유소",
         "address": "강원도 삼척시 동해대로 3852",
-        "location": "야외 주차장"
+        "location": "야외 주차장",
+        "latitude": 37.4295047,
+        "longitude": 129.1830555
     },
     {
         "title": "KT&G",
         "address": "서울특별시 강남구 영동대로 416",
-        "location": "야외 주차장"
+        "location": "야외 주차장",
+        "latitude": 37.5065841,
+        "longitude": 127.0653267
     },
     {
         "title": "판타지움",
         "address": "경기도 수원시 영통구 덕영대로 1566",
-        "location": "지상 2층"
+        "location": "지상 2층",
+        "latitude": 37.2451296,
+        "longitude": 127.0618145
     },
     {
         "title": "파크엠",
         "address": "서울특별시 마포구 매봉산로 80",
-        "location": "지상 9층"
-    },
+        "location": "지상 9층",
+        "latitude": 37.5785473,
+        "longitude": 126.8942917
+    }
     {
         "title": "광명역B 주차빌딩",
         "address": "경기도 광명시 덕안로 16",
-        "location": "지상 3층"
+        "location": "지상 3층",
+        "latitude": 37.4155565,
+        "longitude": 126.8826086
     },
     {
         "title": "동해웰빙레포츠타운",
         "address": "강원도 동해시 천곡로 77",
-        "location": "야외 주차장"
+        "location": "야외 주차장",
+        "latitude": 37.5247583,
+        "longitude": 129.1142625
     },
     {
         "title": "썬밸리호텔",
         "address": "경기도 여주시 강변유원지길 45",
-        "location": "야외 주차장"
+        "location": "야외 주차장",
+        "latitude": 37.2931499,
+        "longitude": 127.6611943
     },
     {
         "title": "제이 골프클럽",
         "address": "충청북도 음성군 금왕읍 대금로 1356",
-        "location": "야외 주차장"
+        "location": "야외 주차장",
+        "latitude": 36.9851469,
+        "longitude": 127.5838108
     },
     {
         "title": "460정육식당",
         "address": "경상북도 구미시 새마을로 74-4",
-        "location": "야외 주차장"
+        "location": "야외 주차장",
+        "latitude": 36.1085093,
+        "longitude": 128.3460332
     },
     {
         "title": "고척 아이파크몰",
         "address": "서울특별시 구로구 경인로43길 49",
-        "location": "지하 1층"
+        "location": "지하 1층",
+        "latitude": 37.4980688,
+        "longitude": 126.8599135
     },
     {
         "title": "대소 골프클럽",
         "address": "충청북도 음성군 대소면 대성로 77번길 25-1",
-        "location": "야외 주차장"
+        "location": "야외 주차장",
+        "latitude": 36.9774937,
+        "longitude": 127.4879232
     },
     {
         "title": "모다아울렛 행담도서평택점",
         "address": "충청남도 당진시 신평명 서해안고속도로 276",
-        "location": "야외 주차장"
+        "location": "야외 주차장",
+        "latitude": 36.941334,
+        "longitude": 126.809999
     },
     {
         "title": "라포르테블랑",
         "address": "경기 성남시 분당구 황새울로311번길 28",
-        "location": "지상 1층"
+        "location": "지상 1층",
+        "latitude": 37.3860395,
+        "longitude": 127.1206154
     },
     {
         "title": "자유제일주유소",
         "address": "경기도 고양시 덕양구 행주외동 13",
-        "location": "야외 주차장"
+        "location": "야외 주차장",
+        "latitude": 37.6035192,
+        "longitude": 126.8216544
     },
     {
         "title": "카페 아스타나",
         "address": "경기도 화성시 효행로 1203-8",
-        "location": "야외 주차장"
+        "location": "야외 주차장",
+        "latitude": 37.2177677,
+        "longitude": 127.0544027
     },
     {
         "title": "테르메덴",
         "address": "경기도 이천시 모가면 신갈리 371 번지 테르메덴",
-        "location": "야외 주차장"
+        "location": "야외 주차장",
+        "latitude": 37.1963009,
+        "longitude": 127.4457583
     },
     {
         "title": "하남국민체육센터",
         "address": "경기도 하남시 아리수로 600",
-        "location": "야외 주차장"
+        "location": "야외 주차장",
+        "latitude": 37.5668926,
+        "longitude": 127.1940923
     },
     {
         "title": "에피소드 서초 393",
         "address": "서울특별시 서초구 강남대로49길 10",
-        "location": "지하 5층"
+        "location": "지하 5층",
+        "latitude": 37.4899316,
+        "longitude": 127.0298818
     },
     {
         "title": "노리카페",
         "address": "경북 안동시 풍산읍 본마을길 20",
-        "location": "야외 주차장"
+        "location": "야외 주차장",
+        "latitude": 36.5910631,
+        "longitude": 128.6315722
     },
     {
         "title": "AK PLAZA 분당점",
         "address": "경기도 성남시 분당구 황새울로 312번길 36",
-        "location": "지상 3층"
+        "location": "지상 3층",
+        "latitude": 37.3839726,
+        "longitude": 127.1234052
     },
     {
         "title": "KNN 타워",
         "address": "부산광역시 해운대구 샌텀서로 30",
-        "location": "지하 5층"
+        "location": "지하 5층",
+        "latitude": 35.171900,
+        "longitude": 129.128560
     },
     {
         "title": "센트로폴리스",
         "address": "서울특별시 종로구 우정국로 26",
-        "location": "지하 6층"
+        "location": "지하 6층",
+        "latitude": 37.5714967,
+        "longitude": 126.9836590
     },
     {
         "title": "신재생에너지전시관",
         "address": "강원도 평창군 대관령면 경강로 5754",
-        "location": "야외 주차장"
+        "location": "야외 주차장",
+        "latitude": 37.6855719,
+        "longitude": 128.7582873
     },
     {
         "title": "드래곤시티",
         "address": "서울특별시 용산구 청파로20길 95",
-        "location": "지하 3층"
+        "location": "지하 3층",
+        "latitude": 37.5321767,
+        "longitude": 126.9608486
     },
     {
         "title": "하단 아트몰링",
         "address": "부산광역시 사하구 낙동남로 1413",
-        "location": "지하 5층"
-    },
+        "location": "지하 5층",
+        "latitude": 35.1067550,
+        "longitude": 128.9664750
+    }
     {
         "title": "동탄역 그란비아스타",
         "address": "경기도 화성시 동탄대로 446",
-        "location": "지하 2층"
+        "location": "지하 2층",
+        "latitude": 37.1933905,
+        "longitude": 127.1000579
     },
     {
         "title": "완주 - 제이플라자",
         "address": "전라북도 완주시 봉동읍 봉비로 23",
-        "location": "야외 주차장"
+        "location": "야외 주차장",
+        "latitude": 35.987026,
+        "longitude": 127.117196
     },
     {
         "title": "모다아울렛 진주점",
         "address": "경상남도 진주시 정촌면 삼일로 95번길 46",
-        "location": "야외 주차장"
+        "location": "야외 주차장",
+        "latitude": 35.1321128,
+        "longitude": 128.0984618
     },
     {
         "title": "365 세이프타운",
         "address": "강원도 태백시 장성동 287",
-        "location": "야외 주차장"
+        "location": "야외 주차장",
+        "latitude": 37.0998869,
+        "longitude": 129.0239602
     },
     {
         "title": "모다아울렛 울산점",
         "address": "울산광역시 북구 진장유통로 78-6",
-        "location": "지상 5층"
+        "location": "지상 5층",
+        "latitude": 35.5770563,
+        "longitude": 129.3571414
     },
     {
         "title": "수하림",
         "address": "경기도 용인시 처인구 포곡읍 영문리 113-5",
-        "location": "야외 주차장"
+        "location": "야외 주차장",
+        "latitude": 37.2751986,
+        "longitude": 127.2117600
     },
     {
         "title": "정남진 물과학관",
         "address": "전라남도 장흥군 장흥읍 행원리 1230",
-        "location": "야외 주차장"
+        "location": "야외 주차장",
+        "latitude": 34.6860500,
+        "longitude": 126.8999915
     },
     {
         "title": "씨사이드리조트",
         "address": "인천광역시 강화군 길상면 장흥로 217",
-        "location": "야외 주차장"
+        "location": "야외 주차장",
+        "latitude": 37.6171220,
+        "longitude": 126.4981147
     },
     {
         "title": "DM 스퀘어",
         "address": "서울특별시 강동구 고덕동 93-2",
-        "location": "지하 2층"
+        "location": "지하 2층",
+        "latitude": 37.5677252,
+        "longitude": 127.1602566
     },
     {
         "title": "디스플레인 카페",
         "address": "경기 남양주시 화도읍 소래비로 48-26",
-        "location": "야외 주차장"
+        "location": "야외 주차장",
+        "latitude": 37.6544573,
+        "longitude": 127.3198785
     },
     {
         "title": "영월관광센터",
         "address": "강원도 영월군 영월읍 방절리 237",
-        "location": "야외 주차장"
+        "location": "야외 주차장",
+        "latitude": 37.1786734,
+        "longitude": 128.4488924
     },
     {
         "title": "바다쏭 카페",
         "address": "인천광역시 연수구 옥련동 194-192",
-        "location": "야외 주차장"
+        "location": "야외 주차장",
+        "latitude": 37.4289097,
+        "longitude": 126.6368927
     },
     {
         "title": "양지 로지스틱스",
-        "address": "경기도 용인시 처인구 양지면 양지리 924번지 ",
-        "location": "야외 주차장"
+        "address": "경기도 용인시 처인구 양지면 양지리 924번지",
+        "location": "야외 주차장",
+        "latitude": 37.2299518,
+        "longitude": 127.2980663
     },
     {
         "title": "레인디어커피",
         "address": "충청북도 청주시 흥덕구 가포산로 191",
-        "location": "야외 주차장 "
+        "location": "야외 주차장",
+        "latitude": 36.6161970,
+        "longitude": 127.4213399
     },
     {
         "title": "유스퀘어",
         "address": "광주광역시 서구 무진대로 904",
-        "location": "지상 4층"
+        "location": "지상 4층",
+        "latitude": 35.1606026,
+        "longitude": 126.8798482
     },
     {
         "title": "물치항",
         "address": "강원도 양양군 강현면 물치리 7-5",
-        "location": "야외 주차장"
+        "location": "야외 주차장",
+        "latitude": 38.1576849,
+        "longitude": 128.6097294
     },
     {
         "title": "한국잡월드",
         "address": "경기도 성남시 분당구 정자동 4-6",
-        "location": "야외 주차장"
+        "location": "야외 주차장",
+        "latitude": 37.3784951,
+        "longitude": 127.1063018
     },
     {
         "title": "AK플라자 원주점",
         "address": "강원도 원주시 봉화로 1",
-        "location": "지하 5층"
+        "location": "지하 5층",
+        "latitude": 37.3456889,
+        "longitude": 127.9276521
     },
     {
         "title": "우리나라",
         "address": "경기도 의정부시 장암동 179-21",
-        "location": "야외 주차장"
+        "location": "야외 주차장",
+        "latitude": 37.7006030,
+        "longitude": 127.0562134
     },
     {
         "title": "전주 미곡로스터리",
         "address": "전라북도 전주시 덕진구 금상길 10",
-        "location": "야외 주차장"
+        "location": "야외 주차장",
+        "latitude": 35.8415161,
+        "longitude": 127.1738271
     },
     {
         "title": "모다아울렛 인천점",
         "address": "인천광역시 서구 북항로 32번안길 50",
-        "location": "지상 4층"
+        "location": "지상 4층",
+        "latitude": 37.5099362,
+        "longitude": 126.6477245
     },
     {
-        "title": "AK 플라자 평택 ",
+        "title": "AK 플라자 평택",
         "address": "경기도 평택시 평택로 51",
-        "location": "야외 주차장"
+        "location": "야외 주차장",
+        "latitude": 36.9909191,
+        "longitude": 127.0846944
     },
     {
         "title": "김해 주촌면 천곡리",
         "address": "경상남도 김해시 주촌면 천곡리 1566-3",
-        "location": "야외 주차장"
+        "location": "야외 주차장",
+        "latitude": 35.2304117,
+        "longitude": 128.8416079
     },
     {
         "title": "신라명가",
         "address": "경상북도 경주시 탑동 676-1",
-        "location": "야외 주차장"
+        "location": "야외 주차장",
+        "latitude": 35.8205882,
+        "longitude": 129.2138090
     }
 ]
