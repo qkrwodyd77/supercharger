@@ -37,14 +37,19 @@
         var openInfoWindow = null; // 현재 열린 말풍선 저장 변수
 
         // JSON 데이터 로드 및 마커 표시 함수
-        function loadMarkers(locations) {
+        function loadMarkers(locations, zoomToFit = true) {
             // 기존 마커 제거
             markers.forEach(marker => marker.setMap(null));
             markers = []; // 배열 초기화
 
-            map.setZoom(7); // 줌 레벨 초기화
-            map.setCenter(new naver.maps.LatLng(37.5665, 126.9780)); // 중심을 서울로 초기화
             openInfoWindow = null; // 말풍선 초기화
+
+            if (locations.length === 0) {
+                alert("검색 결과가 없습니다.");
+                return;
+            }
+
+            var bounds = new naver.maps.LatLngBounds();
 
             locations.forEach(location => {
                 var marker = new naver.maps.Marker({
@@ -54,6 +59,7 @@
                 });
 
                 markers.push(marker); // 마커 배열에 추가
+                bounds.extend(new naver.maps.LatLng(location.latitude, location.longitude));
 
                 var infoWindow = new naver.maps.InfoWindow({
                     content: `<div style="padding:10px; font-size:14px;">
@@ -76,6 +82,11 @@
                     }
                 });
             });
+
+            // 검색한 지역이 있으면 해당 지역으로 확대 및 이동
+            if (zoomToFit && locations.length > 0) {
+                map.fitBounds(bounds); // 마커 전체를 포함하는 영역으로 자동 확대
+            }
         }
 
         // JSON 데이터 로드
@@ -83,7 +94,7 @@
             .then(response => response.json())
             .then(locations => {
                 allLocations = locations; // 전체 데이터 저장
-                loadMarkers(allLocations); // 지도에 마커 표시
+                loadMarkers(allLocations, false); // 전국 데이터 표시 (확대 X)
             })
             .catch(error => console.error("JSON 데이터 로드 실패:", error));
 
@@ -93,18 +104,14 @@
 
             if (query === "") {
                 // 검색어가 없으면 전국 데이터 다시 로드
-                loadMarkers(allLocations);
+                loadMarkers(allLocations, false);
             } else {
                 // 검색어가 있으면 필터링
                 var filteredLocations = allLocations.filter(location =>
                     location.title.includes(query) || location.address.includes(query)
                 );
 
-                if (filteredLocations.length === 0) {
-                    alert("검색 결과가 없습니다.");
-                }
-
-                loadMarkers(filteredLocations);
+                loadMarkers(filteredLocations, true); // 검색된 지역을 확대
             }
         }
     </script>
