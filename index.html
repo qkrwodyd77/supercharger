@@ -29,9 +29,11 @@
         fetch("https://qkrwodyd77.github.io/supercharger/superchargers.json")
             .then(response => response.json())
             .then(locations => {
+                console.log("JSON 데이터 로드 완료:", locations);
+
                 locations.forEach(location => {
                     var marker = new naver.maps.Marker({
-                        position: new naver.maps.LatLng(location.lat, location.lng),
+                        position: new naver.maps.LatLng(location.latitude, location.longitude), // lat, lng 수정
                         map: map,
                         title: location.title
                     });
