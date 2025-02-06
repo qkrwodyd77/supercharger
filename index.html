@@ -3,9 +3,11 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>테슬라 수퍼차저</title>
+    <title>TESLA SUPERCHARGER</title>
     <script src="https://openapi.map.naver.com/openapi/v3/maps.js?ncpClientId=sva11nqtl7"></script>
     <style>
+        @import url('https://fonts.googleapis.com/css2?family=Orbitron:wght@500&display=swap'); /* 사이버 느낌 폰트 */
+        
         body, html {
             margin: 0;
             padding: 0;
@@ -16,10 +18,10 @@
         .title {
             font-size: 28px;
             font-weight: bold;
-            color: #333; /* 테슬라 느낌 나는 진한 회색 */
+            color: #666; /* 더 흐린 회색 */
             margin: 10px 0;
             text-align: center;
-            font-family: 'Arial Black', sans-serif;
+            font-family: 'Orbitron', sans-serif; /* 테슬라 느낌 나는 사이버 폰트 */
         }
         .search-container {
             display: flex;
@@ -85,11 +87,29 @@
         .gps-button:hover {
             background: #f0f0f0;
         }
+        .nav-buttons {
+            margin-top: 10px;
+            display: flex;
+            gap: 10px;
+        }
+        .nav-button {
+            padding: 5px 10px;
+            background: #007AFF;
+            color: white;
+            border: none;
+            border-radius: 5px;
+            font-size: 14px;
+            cursor: pointer;
+        }
+        .nav-button.kakao {
+            background: #FEE500;
+            color: black;
+        }
     </style>
 </head>
 <body>
 
-    <div class="title">테슬라 수퍼차저</div>
+    <div class="title">TESLA SUPERCHARGER</div>
 
     <div class="search-container">
         <input type="text" id="searchBox" placeholder="지역 또는 상호명 검색" oninput="toggleClearButton(event)">
@@ -137,7 +157,11 @@
                                 <strong>${location.title}</strong><br>
                                 📍 <b>주소:</b> ${location.address}<br>
                                 🏬 <b>위치:</b> ${location.location}<br>
-                                💰 <b>주차요금:</b> ${location.fee ? location.fee : '정보 없음'}
+                                💰 <b>주차요금:</b> ${location.fee ? location.fee : '정보 없음'}<br>
+                                <div class="nav-buttons">
+                                    <button class="nav-button" onclick="openTMap(${location.latitude}, ${location.longitude})">🚗 티맵</button>
+                                    <button class="nav-button kakao" onclick="openKakaoNavi(${location.latitude}, ${location.longitude})">🚘 카카오내비</button>
+                                </div>
                               </div>`
                 });
 
@@ -181,14 +205,8 @@
             document.getElementById("searchBox").value = "";
             loadMarkers(allLocations);
             map.setCenter(new naver.maps.LatLng(37.5665, 126.9780)); // 서울 중심 좌표
-            map.setZoom(11); // 서울 중심으로 확대
+            map.setZoom(11);
         }
-
-        document.getElementById("searchBox").addEventListener("keypress", function(event) {
-            if (event.key === "Enter") {
-                searchLocations();
-            }
-        });
 
         function toggleClearButton(event) {
             document.querySelector(".clear-button").style.display = event.target.value ? "block" : "none";
@@ -200,18 +218,18 @@
         }
 
         function moveToCurrentLocation() {
-            if (navigator.geolocation) {
-                navigator.geolocation.getCurrentPosition(position => {
-                    var lat = position.coords.latitude;
-                    var lng = position.coords.longitude;
-                    map.setCenter(new naver.maps.LatLng(lat, lng));
-                    map.setZoom(15);
-                }, () => {
-                    alert("위치 정보를 가져올 수 없습니다.");
-                });
-            } else {
-                alert("이 브라우저에서는 위치 서비스를 지원하지 않습니다.");
-            }
+            navigator.geolocation.getCurrentPosition(position => {
+                map.setCenter(new naver.maps.LatLng(position.coords.latitude, position.coords.longitude));
+                map.setZoom(15);
+            });
+        }
+
+        function openTMap(lat, lng) {
+            window.location.href = `tmap://route?goalx=${lng}&goaly=${lat}&goalname=슈퍼차저`;
+        }
+
+        function openKakaoNavi(lat, lng) {
+            window.location.href = `kakaonavi://navigate?name=슈퍼차저&x=${lng}&y=${lat}`;
         }
 
         window.onload = initMap;
