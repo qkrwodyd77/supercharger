@@ -16,6 +16,7 @@
         #map {
             width: 100%;
             height: calc(100vh - 60px);
+            position: relative;
         }
         .search-container {
             display: flex;
@@ -52,168 +53,126 @@
             margin-left: 5px;
         }
         .gps-button {
-            position: absolute;
-            top: 10px;
-            right: 10px;
+            position: fixed;
+            top: 80px;
+            right: 20px;
             background-color: white;
             border: 1px solid #ccc;
             border-radius: 50%;
             padding: 8px;
             cursor: pointer;
-            box-shadow: 0 2px 5px rgba(0,0,0,0.3);
+            z-index: 1000;
+            box-shadow: 0px 0px 5px rgba(0, 0, 0, 0.3);
         }
-        .info-box {
-            padding: 10px;
-            font-size: 14px;
-        }
-        .navi-buttons {
-            margin-top: 10px;
-        }
-        .navi-buttons a {
-            text-decoration: none;
-            display: inline-block;
-            padding: 5px 10px;
-            margin: 5px;
-            border-radius: 5px;
-            color: white;
-            font-size: 14px;
-        }
-        .navi-tmap { background-color: #0068FF; }
-        .navi-kakao { background-color: #FEE500; color: black; }
     </style>
 </head>
 <body>
 
-    <h1 style="color: #888; font-size: 28px; font-family: 'Arial Black', sans-serif;">TESLA SUPERCHARGER</h1>
+<div class="search-container">
+    <input type="text" id="searchBox" placeholder="지역을 입력하세요">
+    <button id="clearSearch">X</button>
+    <button id="searchButton">검색</button>
+</div>
 
-    <div class="search-container">
-        <input type="text" id="searchBox" placeholder="지역명을 입력하세요">
-        <button id="clearSearch">✖</button>
-        <button id="searchButton">검색</button>
-    </div>
+<div id="map"></div>
 
-    <div id="map"></div>
-    <button class="gps-button" onclick="moveToCurrentLocation()">📍</button>
+<button class="gps-button" id="gpsButton">📍</button>
 
-    <script>
-        var map = new naver.maps.Map('map', {
-            center: new naver.maps.LatLng(37.5326, 126.9907), // 서울 용산구 중심
-            zoom: 13
-        });
+<script>
+    var map = new naver.maps.Map('map', {
+        center: new naver.maps.LatLng(37.5326, 126.9902), // 용산구 중심
+        zoom: 12
+    });
 
-        var allLocations = [];
-        var markers = [];
+    var allLocations = []; 
 
-        function loadMarkers(locations) {
-            markers.forEach(marker => marker.setMap(null));
-            markers = [];
+    function loadMarkers(locations) {
+        map.dataProvider && map.dataProvider.setMap(null);
 
-            locations.forEach(location => {
-                var marker = new naver.maps.Marker({
-                    position: new naver.maps.LatLng(location.latitude, location.longitude),
-                    map: map,
-                    title: location.title
-                });
-
-                var infoWindow = new naver.maps.InfoWindow({
-                    content: `<div class="info-box">
-                                <strong>${location.title}</strong><br>
-                                📍 <b>주소:</b> ${location.address}<br>
-                                🏬 <b>위치:</b> ${location.location}<br>
-                                💰 <b>주차요금:</b> ${location.fee || '정보 없음'}<br>
-                                <div class="navi-buttons">
-                                    <a class="navi-tmap" href="#" onclick="launchNavi('tmap', ${location.latitude}, ${location.longitude})">🚗 티맵</a>
-                                    <a class="navi-kakao" href="#" onclick="launchNavi('kakao', ${location.latitude}, ${location.longitude})">🚗 카카오네비</a>
-                                </div>
-                              </div>`
-                });
-
-                naver.maps.Event.addListener(marker, "click", function () {
-                    if (infoWindow.getMap()) {
-                        infoWindow.close();
-                    } else {
-                        infoWindow.open(map, marker);
-                    }
-                });
-
-                markers.push(marker);
+        locations.forEach(location => {
+            var marker = new naver.maps.Marker({
+                position: new naver.maps.LatLng(location.latitude, location.longitude),
+                map: map,
+                title: location.title
             });
-        }
 
-        fetch("https://qkrwodyd77.github.io/supercharger/superchargers.json")
-            .then(response => response.json())
-            .then(locations => {
-                allLocations = locations;
-                loadMarkers(allLocations);
-            })
-            .catch(error => console.error("JSON 데이터 로드 실패:", error));
+            var infoWindow = new naver.maps.InfoWindow({
+                content: `<div style="padding:10px; font-size:14px;">
+                            <strong>${location.title}</strong><br>
+                            📍 <b>주소:</b> ${location.address}<br>
+                            🏬 <b>위치:</b> ${location.location}<br>
+                            💰 <b>주차요금:</b> ${location.fee ? location.fee : '정보 없음'}
+                          </div>`
+            });
 
-        function searchLocations() {
-            var query = document.getElementById("searchBox").value.trim();
-
-            if (query === "") {
-                map.setCenter(new naver.maps.LatLng(37.5326, 126.9907));
-                map.setZoom(13);
-                loadMarkers(allLocations);
-            } else {
-                var filteredLocations = allLocations.filter(location =>
-                    location.title.includes(query) || location.address.includes(query)
-                );
-
-                if (filteredLocations.length > 0) {
-                    var firstLocation = filteredLocations[0];
-                    map.setCenter(new naver.maps.LatLng(firstLocation.latitude, firstLocation.longitude));
-                    map.setZoom(14);
+            naver.maps.Event.addListener(marker, "click", function () {
+                if (infoWindow.getMap()) {
+                    infoWindow.close();
+                } else {
+                    infoWindow.open(map, marker);
                 }
-
-                loadMarkers(filteredLocations);
-            }
-        }
-
-        document.getElementById("searchButton").addEventListener("click", searchLocations);
-        document.getElementById("searchBox").addEventListener("keypress", function (e) {
-            if (e.key === "Enter") searchLocations();
+            });
         });
+    }
 
-        document.getElementById("clearSearch").addEventListener("click", function () {
-            document.getElementById("searchBox").value = "";
-            map.setCenter(new naver.maps.LatLng(37.5326, 126.9907));
-            map.setZoom(13);
+    fetch("https://qkrwodyd77.github.io/supercharger/superchargers.json")
+        .then(response => response.json())
+        .then(locations => {
+            allLocations = locations;
             loadMarkers(allLocations);
-        });
+        })
+        .catch(error => console.error("JSON 데이터 로드 실패:", error));
 
-        function moveToCurrentLocation() {
-            if (navigator.geolocation) {
-                navigator.geolocation.getCurrentPosition(function (position) {
-                    var lat = position.coords.latitude;
-                    var lng = position.coords.longitude;
-                    map.setCenter(new naver.maps.LatLng(lat, lng));
-                    map.setZoom(14);
-                }, function () {
-                    alert("위치 정보를 가져올 수 없습니다.");
-                });
-            } else {
-                alert("이 브라우저에서는 위치 정보를 지원하지 않습니다.");
-            }
-        }
+    function searchLocations() {
+        var query = document.getElementById("searchBox").value.trim();
 
-        function launchNavi(app, lat, lng) {
-            if (!isMobile()) {
-                alert("모바일 기기에서만 사용 가능합니다.");
-                return;
+        if (query === "") {
+            map.setCenter(new naver.maps.LatLng(37.5326, 126.9902)); // 용산구 중심
+            map.setZoom(12);
+            loadMarkers(allLocations);
+        } else {
+            var filteredLocations = allLocations.filter(location =>
+                location.title.includes(query) || location.address.includes(query)
+            );
+
+            if (filteredLocations.length > 0) {
+                var firstLocation = filteredLocations[0];
+                map.setCenter(new naver.maps.LatLng(firstLocation.latitude, firstLocation.longitude));
+                map.setZoom(14);
             }
 
-            if (app === "tmap") {
-                window.location.href = `tmap://route?goalx=${lng}&goaly=${lat}`;
-            } else if (app === "kakao") {
-                window.location.href = `kakaomap://route?ep=${lat},${lng}`;
-            }
+            loadMarkers(filteredLocations);
         }
+    }
 
-        function isMobile() {
-            return /iPhone|iPad|iPod|Android/i.test(navigator.userAgent);
+    document.getElementById("searchButton").addEventListener("click", searchLocations);
+    document.getElementById("searchBox").addEventListener("keypress", function (e) {
+        if (e.key === "Enter") {
+            searchLocations();
         }
-    </script>
+    });
+
+    document.getElementById("clearSearch").addEventListener("click", function () {
+        document.getElementById("searchBox").value = "";
+        map.setCenter(new naver.maps.LatLng(37.5326, 126.9902)); // 용산구 중심
+        map.setZoom(12);
+        loadMarkers(allLocations);
+    });
+
+    document.getElementById("gpsButton").addEventListener("click", function () {
+        if (navigator.geolocation) {
+            navigator.geolocation.getCurrentPosition(function (position) {
+                var userLatLng = new naver.maps.LatLng(position.coords.latitude, position.coords.longitude);
+                map.setCenter(userLatLng);
+                map.setZoom(14);
+            }, function (error) {
+                alert("위치 정보를 가져올 수 없습니다.");
+            });
+        } else {
+            alert("이 브라우저에서는 위치 정보를 지원하지 않습니다.");
+        }
+    });
+</script>
 
 </body>
 </html>
