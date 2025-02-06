@@ -33,14 +33,14 @@
         });
 
         var allLocations = []; // 전체 데이터를 저장할 배열
-        var openInfoWindow = null; // 🔹 현재 열린 말풍선 저장 변수
+        var openInfoWindow = null; // 현재 열린 말풍선 저장 변수
 
         // JSON 데이터 로드 및 마커 표시 함수
         function loadMarkers(locations) {
             map.setZoom(7); // 줌 레벨 초기화
             map.setCenter(new naver.maps.LatLng(37.5665, 126.9780)); // 중심을 서울로 초기화
             map.dataProvider && map.dataProvider.setMap(null); // 기존 마커 초기화
-            openInfoWindow = null; // 🔹 말풍선 초기화
+            openInfoWindow = null; // 말풍선 초기화
 
             locations.forEach(location => {
                 var marker = new naver.maps.Marker({
@@ -54,16 +54,11 @@
                                 <strong>${location.title}</strong><br>
                                 📍 <b>주소:</b> ${location.address}<br>
                                 🏬 <b>위치:</b> ${location.location}<br>
-                                💰 <b>주차요금:</b> ${location.fee ? location.fee : '정보 없음'}<br>
-                                <a href="https://map.naver.com/v5/directions/37.5665,126.9780,현재위치/${location.latitude},${location.longitude},${location.title}/car"
-                                    target="_blank"
-                                    style="display:inline-block; margin-top:8px; padding:5px 10px; background:#03C75A; color:#fff; text-decoration:none; border-radius:5px;">
-                                    📍 네이버 길찾기
-                                </a>
+                                💰 <b>주차요금:</b> ${location.fee ? location.fee : '정보 없음'}
                               </div>`
                 });
 
-                // 🔹 마커 클릭 시 말풍선 토글 기능 추가
+                // 마커 클릭 시 말풍선 토글 기능 추가
                 naver.maps.Event.addListener(marker, "click", function () {
                     if (openInfoWindow === infoWindow) {
                         openInfoWindow.close();
