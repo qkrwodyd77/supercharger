@@ -33,13 +33,17 @@
         });
 
         var allLocations = []; // 전체 데이터를 저장할 배열
+        var markers = []; // 현재 표시된 마커 배열
         var openInfoWindow = null; // 현재 열린 말풍선 저장 변수
 
         // JSON 데이터 로드 및 마커 표시 함수
         function loadMarkers(locations) {
+            // 기존 마커 제거
+            markers.forEach(marker => marker.setMap(null));
+            markers = []; // 배열 초기화
+
             map.setZoom(7); // 줌 레벨 초기화
             map.setCenter(new naver.maps.LatLng(37.5665, 126.9780)); // 중심을 서울로 초기화
-            map.dataProvider && map.dataProvider.setMap(null); // 기존 마커 초기화
             openInfoWindow = null; // 말풍선 초기화
 
             locations.forEach(location => {
@@ -48,6 +52,8 @@
                     map: map,
                     title: location.title
                 });
+
+                markers.push(marker); // 마커 배열에 추가
 
                 var infoWindow = new naver.maps.InfoWindow({
                     content: `<div style="padding:10px; font-size:14px;">
@@ -93,6 +99,11 @@
                 var filteredLocations = allLocations.filter(location =>
                     location.title.includes(query) || location.address.includes(query)
                 );
+
+                if (filteredLocations.length === 0) {
+                    alert("검색 결과가 없습니다.");
+                }
+
                 loadMarkers(filteredLocations);
             }
         }
