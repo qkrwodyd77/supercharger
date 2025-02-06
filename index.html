@@ -6,66 +6,49 @@
     <title>테슬라 수퍼차저 지도</title>
     <script src="https://openapi.map.naver.com/openapi/v3/maps.js?ncpClientId=sva11nqtl7"></script>
     <style>
-        body { font-family: Arial, sans-serif; text-align: center; }
-        #map { width: 100%; height: 600px; margin-top: 10px; }
-        .title { font-size: 24px; font-weight: bold; color: #d50000; margin-bottom: 10px; }
-        .subtitle { font-size: 16px; color: #555; margin-bottom: 20px; }
-
-        /* 검색창 컨테이너 */
-        #searchContainer {
-            position: relative;
-            display: inline-flex;
-            align-items: center;
+        body {
+            font-family: Arial, sans-serif;
+            text-align: center;
+        }
+        #map {
+            width: 100%;
+            height: 600px;
+            margin-top: 10px;
+        }
+        .title {
+            font-size: 24px;
+            font-weight: bold;
+            color: #d50000;
             margin-bottom: 10px;
         }
-
-        /* 검색 입력창 */
-        #searchBox {
-            padding: 8px 35px 8px 10px;
-            width: 250px;
-            font-size: 14px;
-            border: 1px solid #ccc;
-            border-radius: 5px;
-            outline: none;
+        .subtitle {
+            font-size: 16px;
+            color: #555;
+            margin-bottom: 20px;
         }
-
-        /* X 버튼 (검색창 내부) */
-        #clearButton {
-            position: absolute;
-            right: 35px;
-            background: none;
-            border: none;
-            cursor: pointer;
-            font-size: 18px;
-            color: gray;
-            display: none;
-        }
-
-        /* 검색 버튼 */
-        #searchButton {
-            padding: 8px 12px;
-            font-size: 14px;
-            cursor: pointer;
-            background: #03C75A;
-            color: white;
-            border: none;
-            border-radius: 5px;
-            margin-left: 5px;
-        }
-
-        /* 내 위치 버튼 */
-        #gpsButton {
+        /* GPS 버튼 스타일 */
+        .gps-button {
             position: absolute;
             top: 10px;
             right: 10px;
-            padding: 8px 12px;
-            background: #007aff;
-            color: white;
-            border: none;
-            border-radius: 5px;
+            width: 40px;
+            height: 40px;
+            background: white;
+            border-radius: 50%;
+            border: 1px solid #ccc;
+            box-shadow: 2px 2px 5px rgba(0, 0, 0, 0.2);
+            display: flex;
+            align-items: center;
+            justify-content: center;
             cursor: pointer;
-            font-size: 14px;
             z-index: 1000;
+        }
+        .gps-button:hover {
+            background: #f0f0f0;
+        }
+        .gps-button::after {
+            content: "📍";
+            font-size: 20px;
         }
     </style>
 </head>
@@ -74,46 +57,25 @@
     <div class="title">📍 테슬라 수퍼차저 위치</div>
     <div class="subtitle">지도에서 수퍼차저를 클릭하면 상세 정보를 확인할 수 있습니다.</div>
 
-    <div id="searchContainer">
-        <input type="text" id="searchBox" placeholder="지역명 또는 상호 검색" oninput="toggleClearButton()" onkeypress="handleEnter(event)">
-        <button id="clearButton" onclick="clearSearch()">×</button>
-        <button id="searchButton" onclick="searchLocations()">검색</button>
-    </div>
-
-    <button id="gpsButton" onclick="moveToCurrentLocation()">📍 내 위치</button>
-
+    <!-- 지도 영역 -->
     <div id="map"></div>
 
+    <!-- GPS 버튼 -->
+    <div class="gps-button" onclick="moveToCurrentLocation()" title="내 위치 찾기"></div>
+
     <script>
-        var map;
-        var userMarker;
-        var allLocations = [];
-        var markers = [];
-        var infoWindows = [];
+        var map = new naver.maps.Map('map', {
+            center: new naver.maps.LatLng(36.5, 127.5), // 대한민국 중심 좌표
+            zoom: 7
+        });
 
-        function initMap() {
-            map = new naver.maps.Map('map', {
-                center: new naver.maps.LatLng(36.5, 127.5),
-                zoom: 7
-            });
+        var allLocations = []; // 전체 데이터를 저장할 배열
 
-            fetch("https://qkrwodyd77.github.io/supercharger/superchargers.json")
-                .then(response => response.json())
-                .then(locations => {
-                    allLocations = locations;
-                    loadMarkers(allLocations);
-                })
-                .catch(error => console.error("JSON 데이터 로드 실패:", error));
-        }
-
-        function loadMarkers(locations, zoomLevel = 7, center = new naver.maps.LatLng(36.5, 127.5)) {
-            markers.forEach(marker => marker.setMap(null));
-            infoWindows.forEach(infoWindow => infoWindow.close());
-            markers = [];
-            infoWindows = [];
-
-            map.setZoom(zoomLevel);
-            map.setCenter(center);
+        // JSON 데이터 로드 및 마커 표시 함수
+        function loadMarkers(locations) {
+            map.setZoom(7); // 줌 레벨 초기화
+            map.setCenter(new naver.maps.LatLng(36.5, 127.5)); // 대한민국 중심 좌표로 초기화
+            map.dataProvider && map.dataProvider.setMap(null); // 기존 마커 초기화
 
             locations.forEach(location => {
                 var marker = new naver.maps.Marker({
@@ -135,85 +97,58 @@
                     if (infoWindow.getMap()) {
                         infoWindow.close();
                     } else {
-                        infoWindows.forEach(win => win.close());
                         infoWindow.open(map, marker);
                     }
                 });
-
-                markers.push(marker);
-                infoWindows.push(infoWindow);
             });
         }
 
-        function searchLocations() {
-            var query = document.getElementById("searchBox").value.trim();
+        // JSON 데이터 로드
+        fetch("https://qkrwodyd77.github.io/supercharger/superchargers.json")
+            .then(response => response.json())
+            .then(locations => {
+                allLocations = locations; // 전체 데이터 저장
+                loadMarkers(allLocations); // 지도에 마커 표시
+            })
+            .catch(error => console.error("JSON 데이터 로드 실패:", error));
 
-            if (query === "") {
-                loadMarkers(allLocations);
-            } else {
-                var filteredLocations = allLocations.filter(location =>
-                    location.title.includes(query) || location.address.includes(query)
-                );
-
-                if (filteredLocations.length > 0) {
-                    var firstLocation = filteredLocations[0];
-                    loadMarkers(filteredLocations, 12, new naver.maps.LatLng(firstLocation.latitude, firstLocation.longitude));
-                } else {
-                    alert("검색 결과가 없습니다.");
-                }
-            }
-        }
-
-        function toggleClearButton() {
-            var searchBox = document.getElementById("searchBox");
-            var clearButton = document.getElementById("clearButton");
-
-            clearButton.style.display = searchBox.value.length > 0 ? "inline" : "none";
-        }
-
-        function clearSearch() {
-            document.getElementById("searchBox").value = "";
-            toggleClearButton();
-            searchLocations();
-        }
-
-        function handleEnter(event) {
-            if (event.key === "Enter") {
-                searchLocations();
-            }
-        }
-
+        // 내 위치 이동 기능
         function moveToCurrentLocation() {
             if (navigator.geolocation) {
-                navigator.geolocation.getCurrentPosition(function (position) {
-                    var userLatLng = new naver.maps.LatLng(position.coords.latitude, position.coords.longitude);
+                navigator.geolocation.getCurrentPosition(position => {
+                    var lat = position.coords.latitude;
+                    var lng = position.coords.longitude;
 
-                    map.setCenter(userLatLng);
-                    map.setZoom(12);
+                    map.setCenter(new naver.maps.LatLng(lat, lng));
+                    map.setZoom(15);
 
-                    if (userMarker) {
-                        userMarker.setMap(null);
-                    }
-
-                    userMarker = new naver.maps.Marker({
-                        position: userLatLng,
+                    var myLocationMarker = new naver.maps.Marker({
+                        position: new naver.maps.LatLng(lat, lng),
                         map: map,
-                        icon: {
-                            url: "https://maps.google.com/mapfiles/ms/icons/blue-dot.png",
-                            size: new naver.maps.Size(32, 32),
-                            origin: new naver.maps.Point(0, 0),
-                            anchor: new naver.maps.Point(16, 16)
+                        title: "내 위치"
+                    });
+
+                    var infoWindow = new naver.maps.InfoWindow({
+                        content: `<div style="padding:10px; font-size:14px;">
+                                    📍 <b>현재 위치</b><br>
+                                    위도: ${lat.toFixed(6)}, 경도: ${lng.toFixed(6)}
+                                  </div>`
+                    });
+
+                    naver.maps.Event.addListener(myLocationMarker, "click", function () {
+                        if (infoWindow.getMap()) {
+                            infoWindow.close();
+                        } else {
+                            infoWindow.open(map, myLocationMarker);
                         }
                     });
-                }, function () {
+                }, () => {
                     alert("위치 정보를 가져올 수 없습니다.");
                 });
             } else {
-                alert("이 브라우저에서는 위치 정보를 지원하지 않습니다.");
+                alert("이 브라우저에서는 위치 서비스를 지원하지 않습니다.");
             }
         }
-
-        window.onload = initMap;
     </script>
 
 </body>
