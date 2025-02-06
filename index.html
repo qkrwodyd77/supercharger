@@ -10,12 +10,17 @@
         #map { width: 100%; height: 600px; margin-top: 10px; }
         .title { font-size: 24px; font-weight: bold; color: #d50000; margin-bottom: 10px; }
         .subtitle { font-size: 16px; color: #555; margin-bottom: 20px; }
+        #search-box { width: 300px; padding: 8px; margin-bottom: 10px; }
+        #search-btn { padding: 8px 12px; cursor: pointer; background-color: #d50000; color: white; border: none; }
     </style>
 </head>
 <body>
 
     <div class="title">📍 테슬라 수퍼차저 위치</div>
     <div class="subtitle">지도에서 수퍼차저를 클릭하면 상세 정보를 확인할 수 있습니다.</div>
+
+    <input type="text" id="search-box" placeholder="지역 또는 장소명을 입력하세요">
+    <button id="search-btn">검색</button>
 
     <div id="map"></div>
 
@@ -25,15 +30,16 @@
             zoom: 7
         });
 
+        var markers = []; // 마커 저장 배열
+        var infoWindows = []; // 정보창 저장 배열
+
         // JSON 파일에서 수퍼차저 데이터 불러오기
         fetch("https://qkrwodyd77.github.io/supercharger/superchargers.json")
             .then(response => response.json())
             .then(locations => {
-                console.log("JSON 데이터 로드 완료:", locations);
-
                 locations.forEach(location => {
                     var marker = new naver.maps.Marker({
-                        position: new naver.maps.LatLng(location.latitude, location.longitude), // lat, lng 수정
+                        position: new naver.maps.LatLng(location.latitude, location.longitude),
                         map: map,
                         title: location.title
                     });
@@ -49,9 +55,44 @@
                     naver.maps.Event.addListener(marker, "click", function() {
                         infoWindow.open(map, marker);
                     });
+
+                    markers.push({ marker, location });
+                    infoWindows.push(infoWindow);
                 });
             })
             .catch(error => console.error("JSON 데이터 로드 실패:", error));
+
+        // 검색 기능 추가
+        document.getElementById("search-btn").addEventListener("click", function() {
+            var searchText = document.getElementById("search-box").value.trim();
+
+            if (searchText === "") {
+                alert("검색어를 입력하세요!");
+                return;
+            }
+
+            var matchedMarkers = markers.filter(item =>
+                item.location.title.includes(searchText) || 
+                item.location.address.includes(searchText) ||
+                item.location.location.includes(searchText)
+            );
+
+            if (matchedMarkers.length === 0) {
+                alert("검색 결과가 없습니다.");
+                return;
+            }
+
+            // 모든 마커 숨기기
+            markers.forEach(item => item.marker.setMap(null));
+
+            // 검색된 마커만 표시
+            matchedMarkers.forEach(item => item.marker.setMap(map));
+
+            // 지도 중심 이동 (첫 번째 검색된 위치로)
+            var firstLocation = matchedMarkers[0].location;
+            map.setCenter(new naver.maps.LatLng(firstLocation.latitude, firstLocation.longitude));
+            map.setZoom(13);
+        });
     </script>
 
 </body>
