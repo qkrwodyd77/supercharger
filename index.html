@@ -2,19 +2,20 @@
 <html lang="ko">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
     <title>Tesla Supercharger</title>
-    <script src="https://openapi.map.naver.com/openapi/v3/maps.js?ncpClientId=sva11nqtl7"></script>
+    <script src="https://openapi.map.naver.com/openapi/v3/maps.js?ncpClientId=YOUR_NAVER_MAP_CLIENT_ID"></script>
     <style>
-        body {
-            font-family: Arial, sans-serif;
-            text-align: center;
+        body, html {
+            height: 100%;
             margin: 0;
             padding: 0;
+            font-family: Arial, sans-serif;
+            text-align: center;
         }
         #map {
             width: 100%;
-            height: 600px;
+            height: calc(100vh - 60px);
         }
         .search-container {
             display: flex;
@@ -24,7 +25,7 @@
             position: relative;
         }
         #searchBox {
-            width: 300px; /* PC에서 너무 길어지는 것 방지 */
+            width: 300px;
             padding: 8px;
             border: 1px solid #ccc;
             border-radius: 4px;
@@ -120,8 +121,8 @@
                                 🏬 <b>위치:</b> ${location.location}<br>
                                 💰 <b>주차요금:</b> ${location.fee || '정보 없음'}<br>
                                 <div class="navi-buttons">
-                                    <a class="navi-tmap" href="tmap://route?goalx=${location.longitude}&goaly=${location.latitude}" target="_blank">🚗 티맵</a>
-                                    <a class="navi-kakao" href="kakaomap://route?ep=${location.latitude},${location.longitude}" target="_blank">🚗 카카오네비</a>
+                                    <a class="navi-tmap" href="#" onclick="launchNavi('tmap', ${location.latitude}, ${location.longitude})">🚗 티맵</a>
+                                    <a class="navi-kakao" href="#" onclick="launchNavi('kakao', ${location.latitude}, ${location.longitude})">🚗 카카오네비</a>
                                 </div>
                               </div>`
                 });
@@ -193,6 +194,23 @@
             } else {
                 alert("이 브라우저에서는 위치 정보를 지원하지 않습니다.");
             }
+        }
+
+        function launchNavi(app, lat, lng) {
+            if (!isMobile()) {
+                alert("모바일 기기에서만 사용 가능합니다.");
+                return;
+            }
+
+            if (app === "tmap") {
+                window.location.href = `tmap://route?goalx=${lng}&goaly=${lat}`;
+            } else if (app === "kakao") {
+                window.location.href = `kakaomap://route?ep=${lat},${lng}`;
+            }
+        }
+
+        function isMobile() {
+            return /iPhone|iPad|iPod|Android/i.test(navigator.userAgent);
         }
     </script>
 
