@@ -6,93 +6,128 @@
     <title>Tesla Supercharger</title>
     <script src="https://openapi.map.naver.com/openapi/v3/maps.js?ncpClientId=YOUR_NAVER_MAP_CLIENT_ID"></script>
     <style>
+        /* 전체 페이지 스타일 */
         body, html {
             height: 100%;
             margin: 0;
             padding: 0;
-            font-family: Arial, sans-serif;
-            text-align: center;
+            font-family: 'Arial', sans-serif;
+            background-color: #f4f4f4;
         }
-        #map {
+
+        /* 헤더 스타일 */
+        .header {
             width: 100%;
-            height: calc(100vh - 60px);
+            padding: 15px 0;
+            text-align: center;
+            font-size: 28px;
+            font-weight: bold;
+            color: #333;
+            background-color: white;
+            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+            font-family: 'Arial Black', sans-serif;
         }
+
+        /* 검색 컨테이너 */
         .search-container {
             display: flex;
             justify-content: center;
             align-items: center;
-            margin: 10px 0;
-            position: relative;
+            margin: 15px 0;
         }
+
+        /* 검색 입력창 */
         #searchBox {
-            width: 280px;
-            padding: 8px 35px 8px 10px;
+            width: 300px;
+            padding: 10px;
             border: 1px solid #ccc;
-            border-radius: 4px;
-            position: relative;
+            border-radius: 20px;
+            font-size: 14px;
         }
+
+        /* X 버튼 */
         #clearSearch {
-            position: absolute;
-            right: 155px;
-            top: 50%;
-            transform: translateY(-50%);
-            cursor: pointer;
+            margin-left: -30px;
             background: none;
             border: none;
             font-size: 16px;
             color: #888;
+            cursor: pointer;
         }
+
+        /* 검색 버튼 */
         #searchButton {
-            padding: 8px 15px;
-            background-color: #03C75A;
+            padding: 10px 15px;
+            background-color: black;
             color: white;
             border: none;
-            border-radius: 4px;
+            border-radius: 20px;
             cursor: pointer;
-            margin-left: 5px;
+            font-size: 14px;
+            margin-left: 10px;
         }
+
+        /* 지도 스타일 */
+        #map {
+            width: 100%;
+            height: calc(100vh - 120px);
+        }
+
+        /* GPS 버튼 */
         .gps-button {
             position: absolute;
-            top: 10px;
-            right: 10px;
+            top: 15px;
+            right: 15px;
             background-color: white;
             border: 1px solid #ccc;
             border-radius: 50%;
-            padding: 8px;
+            padding: 10px;
             cursor: pointer;
             box-shadow: 0 2px 5px rgba(0,0,0,0.3);
         }
+
+        /* 팝업 스타일 */
         .info-box {
-            padding: 10px;
+            padding: 12px;
             font-size: 14px;
+            color: #333;
         }
+
+        /* 네비게이션 버튼 스타일 */
         .navi-buttons {
             margin-top: 10px;
+            text-align: center;
         }
+
         .navi-buttons a {
             text-decoration: none;
-            display: inline-block;
-            padding: 5px 10px;
+            padding: 8px 15px;
             margin: 5px;
-            border-radius: 5px;
-            color: white;
+            border-radius: 20px;
             font-size: 14px;
+            display: inline-block;
         }
-        .navi-tmap { background-color: #0068FF; }
+
+        .navi-tmap { background-color: #0068FF; color: white; }
         .navi-kakao { background-color: #FEE500; color: black; }
     </style>
 </head>
 <body>
 
-    <h1 style="color: #888; font-size: 28px; font-family: 'Arial Black', sans-serif;">TESLA SUPERCHARGER</h1>
+    <!-- 헤더 -->
+    <div class="header">TESLA SUPERCHARGER</div>
 
+    <!-- 검색창 -->
     <div class="search-container">
         <input type="text" id="searchBox" placeholder="지역명을 입력하세요">
         <button id="clearSearch">✖</button>
         <button id="searchButton">검색</button>
     </div>
 
+    <!-- 지도 -->
     <div id="map"></div>
+
+    <!-- GPS 버튼 -->
     <button class="gps-button" onclick="moveToCurrentLocation()">📍</button>
 
     <script>
@@ -148,40 +183,6 @@
             })
             .catch(error => console.error("JSON 데이터 로드 실패:", error));
 
-        function searchLocations() {
-            var query = document.getElementById("searchBox").value.trim();
-
-            if (query === "") {
-                map.setCenter(new naver.maps.LatLng(37.5326, 126.9907));
-                map.setZoom(13);
-                loadMarkers(allLocations);
-            } else {
-                var filteredLocations = allLocations.filter(location =>
-                    location.title.includes(query) || location.address.includes(query)
-                );
-
-                if (filteredLocations.length > 0) {
-                    var firstLocation = filteredLocations[0];
-                    map.setCenter(new naver.maps.LatLng(firstLocation.latitude, firstLocation.longitude));
-                    map.setZoom(14);
-                }
-
-                loadMarkers(filteredLocations);
-            }
-        }
-
-        document.getElementById("searchButton").addEventListener("click", searchLocations);
-        document.getElementById("searchBox").addEventListener("keypress", function (e) {
-            if (e.key === "Enter") searchLocations();
-        });
-
-        document.getElementById("clearSearch").addEventListener("click", function () {
-            document.getElementById("searchBox").value = "";
-            map.setCenter(new naver.maps.LatLng(37.5326, 126.9907));
-            map.setZoom(13);
-            loadMarkers(allLocations);
-        });
-
         function moveToCurrentLocation() {
             if (navigator.geolocation) {
                 navigator.geolocation.getCurrentPosition(function (position) {
@@ -198,20 +199,11 @@
         }
 
         function launchNavi(app, lat, lng) {
-            if (!isMobile()) {
-                alert("모바일 기기에서만 사용 가능합니다.");
-                return;
-            }
-
             if (app === "tmap") {
                 window.location.href = `tmap://route?goalx=${lng}&goaly=${lat}`;
             } else if (app === "kakao") {
                 window.location.href = `kakaomap://route?ep=${lat},${lng}`;
             }
-        }
-
-        function isMobile() {
-            return /iPhone|iPad|iPod|Android/i.test(navigator.userAgent);
         }
     </script>
 
