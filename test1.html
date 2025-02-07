@@ -4,7 +4,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
     <title>Tesla Supercharger</title>
-    <script src="https://openapi.map.naver.com/openapi/v3/maps.js?ncpClientId=sva11nqtl7"></script>
+    <script src="https://openapi.map.naver.com/openapi/v3/maps.js?ncpClientId=YOUR_NAVER_MAP_CLIENT_ID"></script>
     <style>
         /* 전체 페이지 스타일 */
         body, html {
@@ -95,39 +95,6 @@
         .gps-button:hover {
             background-color: #ff0000;
         }
-
-        /* 테슬라 슈퍼차저 마커 스타일 */
-        .tesla-marker {
-            width: 32px;
-            height: 32px;
-            background: url('https://upload.wikimedia.org/wikipedia/commons/thumb/e/e8/Tesla_Supercharger_logo.svg/120px-Tesla_Supercharger_logo.svg.png') no-repeat center;
-            background-size: contain;
-        }
-
-        /* 팝업 스타일 */
-        .info-box {
-            padding: 12px;
-            font-size: 14px;
-            color: #333;
-        }
-
-        /* 네비게이션 버튼 스타일 */
-        .navi-buttons {
-            margin-top: 10px;
-            text-align: center;
-        }
-
-        .navi-buttons a {
-            text-decoration: none;
-            padding: 8px 15px;
-            margin: 5px;
-            border-radius: 20px;
-            font-size: 14px;
-            display: inline-block;
-        }
-
-        .navi-tmap { background-color: #0068FF; color: white; }
-        .navi-kakao { background-color: #FEE500; color: black; }
     </style>
 </head>
 <body>
@@ -167,9 +134,11 @@
                     map: map,
                     title: location.title,
                     icon: {
-                        content: '<div class="tesla-marker"></div>',
-                        size: new naver.maps.Size(32, 32),
-                        anchor: new naver.maps.Point(16, 32)
+                        url: 'https://upload.wikimedia.org/wikipedia/commons/e/e8/Tesla_Supercharger_logo.svg', // 테슬라 슈퍼차저 아이콘
+                        size: new naver.maps.Size(30, 30),
+                        scaledSize: new naver.maps.Size(30, 30),
+                        origin: new naver.maps.Point(0, 0),
+                        anchor: new naver.maps.Point(15, 30)
                     }
                 });
 
@@ -179,10 +148,6 @@
                                 📍 <b>주소:</b> ${location.address}<br>
                                 🏬 <b>위치:</b> ${location.location}<br>
                                 💰 <b>주차요금:</b> ${location.fee || '정보 없음'}<br>
-                                <div class="navi-buttons">
-                                    <a class="navi-tmap" href="#" onclick="launchNavi('tmap', ${location.latitude}, ${location.longitude})">🚗 티맵</a>
-                                    <a class="navi-kakao" href="#" onclick="launchNavi('kakao', ${location.latitude}, ${location.longitude})">🚗 카카오네비</a>
-                                </div>
                               </div>`
                 });
 
