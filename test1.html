@@ -4,44 +4,57 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
     <title>Tesla Supercharger</title>
-    <script src="https://openapi.map.naver.com/openapi/v3/maps.js?ncpClientId=sva11nqtl7"></script>
+    <script src="https://openapi.map.naver.com/openapi/v3/maps.js?ncpClientId=YOUR_NAVER_MAP_CLIENT_ID"></script>
+
     <style>
+        /* 전체 페이지 스타일 */
         body, html {
             height: 100%;
             margin: 0;
             padding: 0;
             font-family: Arial, sans-serif;
-            text-align: center;
+            background-color: #f4f4f4;
         }
-        #map {
-            width: 100%;
-            height: calc(100vh - 60px);
-        }
-                /* 테슬라 스타일 헤더 */
+
+        /* 테슬라 스타일 헤더 */
         .header {
             width: 100%;
-            padding: 15px 0;
-            text-align: center;
-            font-size: 28px;
+            padding: 15px 20px;
+            font-size: 24px;
             font-weight: bold;
             color: #333;
             background: linear-gradient(to right, #f4e2c3, #f4e2c3);
             box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        /* 로고 및 검색 컨테이너 (좌측 정렬) */
+        .left-container {
+            display: flex;
+            align-items: center;
+        }
+
+        /* 테슬라 슈퍼차저 로고 스타일 */
+        .logo {
+            font-size: 24px;
+            font-weight: bold;
+            color: #333;
             font-family: 'Arial Black', sans-serif;
         }
 
         /* 검색 컨테이너 */
         .search-container {
             display: flex;
-            justify-content: center;
             align-items: center;
-            margin: 15px 0;
+            margin-left: 20px;
         }
 
         /* 검색 입력창 */
         #searchBox {
-            width: 300px;
-            padding: 10px;
+            width: 250px;
+            padding: 8px 12px;
             border: 1px solid #ccc;
             border-radius: 20px;
             font-size: 14px;
@@ -59,7 +72,7 @@
 
         /* 검색 버튼 */
         #searchButton {
-            padding: 10px 15px;
+            padding: 8px 12px;
             background-color: black;
             color: white;
             border: none;
@@ -68,69 +81,83 @@
             font-size: 14px;
             margin-left: 10px;
         }
-        
-        .gps-button {
-            position: absolute;
-            top: 10px;
-            right: 10px;
-            background-color: white;
-            border: 1px solid #ccc;
-            border-radius: 50%;
-            padding: 8px;
-            cursor: pointer;
-            box-shadow: 0 2px 5px rgba(0,0,0,0.3);
+
+        /* 메뉴 (우측 정렬) */
+        .menu {
+            display: flex;
         }
-        .info-box {
-            padding: 10px;
-            font-size: 14px;
-        }
-        .navi-buttons {
-            margin-top: 10px;
-        }
-        .navi-buttons a {
+
+        .menu a {
             text-decoration: none;
-            display: inline-block;
-            padding: 5px 10px;
-            margin: 5px;
-            border-radius: 5px;
-            color: white;
-            font-size: 14px;
+            color: black;
+            font-size: 16px;
+            margin-left: 20px;
+            font-weight: bold;
         }
-        .navi-tmap { background-color: #0068FF; }
-        .navi-kakao { background-color: #FEE500; color: black; }
+
+        /* 지도 스타일 */
+        #map {
+            width: 100%;
+            height: calc(100vh - 70px);
+        }
+
+        /* 테슬라 스타일 마커 */
+        .tesla-marker {
+            width: 30px;
+            height: 30px;
+        }
     </style>
 </head>
 <body>
 
-    <h1 style="color: #888; font-size: 28px; font-family: 'Arial Black', sans-serif;">TESLA SUPERCHARGER</h1>
-
-    <div class="search-container">
-        <input type="text" id="searchBox" placeholder="지역명을 입력하세요">
-        <button id="clearSearch">✖</button>
-        <button id="searchButton">검색</button>
+    <!-- 헤더 -->
+    <div class="header">
+        <div class="left-container">
+            <div class="logo">TESLA SUPERCHARGER</div>
+            <div class="search-container">
+                <input type="text" id="searchBox" placeholder="지역명을 입력하세요">
+                <button id="clearSearch">✖</button>
+                <button id="searchButton">검색</button>
+            </div>
+        </div>
+        <div class="menu">
+            <a href="#">전기차 놀이터</a>
+            <a href="#">테슬라 정보</a>
+        </div>
     </div>
 
+    <!-- 지도 -->
     <div id="map"></div>
-    <button class="gps-button" onclick="moveToCurrentLocation()">📍</button>
 
     <script>
+        /* 네이버 지도 초기화 */
         var map = new naver.maps.Map('map', {
             center: new naver.maps.LatLng(37.5326, 126.9907), // 서울 용산구 중심
             zoom: 13
         });
 
-        var allLocations = [];
-        var markers = [];
+        var allLocations = []; // 전체 충전소 목록 저장
+        var markers = []; // 지도에 표시할 마커 리스트
 
+        /* 슈퍼차저 마커 추가 함수 */
         function loadMarkers(locations) {
+            // 기존 마커 제거
             markers.forEach(marker => marker.setMap(null));
             markers = [];
 
+            // 새로운 마커 추가
             locations.forEach(location => {
                 var marker = new naver.maps.Marker({
                     position: new naver.maps.LatLng(location.latitude, location.longitude),
                     map: map,
-                    title: location.title
+                    title: location.title,
+                    icon: {
+                        url: 'https://upload.wikimedia.org/wikipedia/commons/thumb/1/1e/Tesla_Supercharger_logo.svg/200px-Tesla_Supercharger_logo.svg.png', // 테슬라 스타일 마커
+                        size: new naver.maps.Size(30, 30),
+                        scaledSize: new naver.maps.Size(30, 30),
+                        origin: new naver.maps.Point(0, 0),
+                        anchor: new naver.maps.Point(15, 30)
+                    }
                 });
 
                 var infoWindow = new naver.maps.InfoWindow({
@@ -138,14 +165,11 @@
                                 <strong>${location.title}</strong><br>
                                 📍 <b>주소:</b> ${location.address}<br>
                                 🏬 <b>위치:</b> ${location.location}<br>
-                                💰 <b>주차요금:</b> ${location.fee || '정보 없음'}<br>
-                                <div class="navi-buttons">
-                                    <a class="navi-tmap" href="#" onclick="launchNavi('tmap', ${location.latitude}, ${location.longitude})">🚗 티맵</a>
-                                    <a class="navi-kakao" href="#" onclick="launchNavi('kakao', ${location.latitude}, ${location.longitude})">🚗 카카오네비</a>
-                                </div>
+                                💰 <b>주차요금:</b> ${location.fee || '정보 없음'}
                               </div>`
                 });
 
+                // 마커 클릭 시 정보 창 표시
                 naver.maps.Event.addListener(marker, "click", function () {
                     if (infoWindow.getMap()) {
                         infoWindow.close();
@@ -158,6 +182,7 @@
             });
         }
 
+        /* JSON 데이터 불러오기 */
         fetch("https://qkrwodyd77.github.io/supercharger/superchargers.json")
             .then(response => response.json())
             .then(locations => {
@@ -166,14 +191,17 @@
             })
             .catch(error => console.error("JSON 데이터 로드 실패:", error));
 
+        /* 검색 기능 */
         function searchLocations() {
             var query = document.getElementById("searchBox").value.trim();
 
             if (query === "") {
+                // 검색창이 비었을 경우 기본 서울 중심
                 map.setCenter(new naver.maps.LatLng(37.5326, 126.9907));
                 map.setZoom(13);
                 loadMarkers(allLocations);
             } else {
+                // 검색 필터링
                 var filteredLocations = allLocations.filter(location =>
                     location.title.includes(query) || location.address.includes(query)
                 );
@@ -193,13 +221,7 @@
             if (e.key === "Enter") searchLocations();
         });
 
-        document.getElementById("clearSearch").addEventListener("click", function () {
-            document.getElementById("searchBox").value = "";
-            map.setCenter(new naver.maps.LatLng(37.5326, 126.9907));
-            map.setZoom(13);
-            loadMarkers(allLocations);
-        });
-
+        /* 내 위치 찾기 */
         function moveToCurrentLocation() {
             if (navigator.geolocation) {
                 navigator.geolocation.getCurrentPosition(function (position) {
@@ -210,26 +232,7 @@
                 }, function () {
                     alert("위치 정보를 가져올 수 없습니다.");
                 });
-            } else {
-                alert("이 브라우저에서는 위치 정보를 지원하지 않습니다.");
             }
-        }
-
-        function launchNavi(app, lat, lng) {
-            if (!isMobile()) {
-                alert("모바일 기기에서만 사용 가능합니다.");
-                return;
-            }
-
-            if (app === "tmap") {
-                window.location.href = `tmap://route?goalx=${lng}&goaly=${lat}`;
-            } else if (app === "kakao") {
-                window.location.href = `kakaomap://route?ep=${lat},${lng}`;
-            }
-        }
-
-        function isMobile() {
-            return /iPhone|iPad|iPod|Android/i.test(navigator.userAgent);
         }
     </script>
 
