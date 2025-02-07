@@ -122,50 +122,41 @@
         var allLocations = [];
         var markers = [];
 
+        function loadMarkers(locations) {
+            markers.forEach(marker => marker.setMap(null));
+            markers = [];
 
-    function loadMarkers(locations) {
-        markers.forEach(marker => marker.setMap(null));
-        markers = [];
+            locations.forEach(location => {
+                var marker = new naver.maps.Marker({
+                    position: new naver.maps.LatLng(location.latitude, location.longitude),
+                    map: map,
+                    title: location.title
+                });
 
-        locations.forEach(location => {
-            var marker = new naver.maps.Marker({
-                position: new naver.maps.LatLng(location.latitude, location.longitude),
-                map: map,
-                title: location.title,
-                icon: {
-                    url: "https://upload.wikimedia.org/wikipedia/commons/thumb/e/e8/Tesla_logo.png/50px-Tesla_logo.png", 
-                    size: new naver.maps.Size(50, 50),
-                    scaledSize: new naver.maps.Size(40, 40),
-                    origin: new naver.maps.Point(0, 0),
-                    anchor: new naver.maps.Point(20, 40)
-                }
+                var infoWindow = new naver.maps.InfoWindow({
+                    content: `<div class="info-box">
+                                <strong>${location.title}</strong><br>
+                                📍 <b>주소:</b> ${location.address}<br>
+                                🏬 <b>위치:</b> ${location.location}<br>
+                                💰 <b>주차요금:</b> ${location.fee || '정보 없음'}<br>
+                                <div class="navi-buttons">
+                                    <a class="navi-tmap" href="#" onclick="launchNavi('tmap', ${location.latitude}, ${location.longitude})">🚗 티맵</a>
+                                    <a class="navi-kakao" href="#" onclick="launchNavi('kakao', ${location.latitude}, ${location.longitude})">🚗 카카오네비</a>
+                                </div>
+                              </div>`
+                });
+
+                naver.maps.Event.addListener(marker, "click", function () {
+                    if (infoWindow.getMap()) {
+                        infoWindow.close();
+                    } else {
+                        infoWindow.open(map, marker);
+                    }
+                });
+
+                markers.push(marker);
             });
-
-            var infoWindow = new naver.maps.InfoWindow({
-                content: `<div class="info-box">
-                            <strong>${location.title}</strong><br>
-                            📍 <b>주소:</b> ${location.address}<br>
-                            🏬 <b>위치:</b> ${location.location}<br>
-                            💰 <b>주차요금:</b> ${location.fee || '정보 없음'}<br>
-                            <div class="navi-buttons">
-                                <a class="navi-tmap" href="#" onclick="launchNavi('tmap', ${location.latitude}, ${location.longitude})">🚗 티맵</a>
-                                <a class="navi-kakao" href="#" onclick="launchNavi('kakao', ${location.latitude}, ${location.longitude})">🚗 카카오네비</a>
-                            </div>
-                          </div>`
-            });
-
-            naver.maps.Event.addListener(marker, "click", function () {
-                if (infoWindow.getMap()) {
-                    infoWindow.close();
-                } else {
-                    infoWindow.open(map, marker);
-                }
-            });
-
-            markers.push(marker);
-        });
-    }
-</script>
+        }
 
         fetch("https://qkrwodyd77.github.io/supercharger/superchargers.json")
             .then(response => response.json())
@@ -244,3 +235,4 @@
 
 </body>
 </html>
+
