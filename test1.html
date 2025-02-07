@@ -1,0 +1,78 @@
+<!DOCTYPE html>
+        fetch("https://qkrwodyd77.github.io/supercharger/superchargers.json")
+            .then(response => response.json())
+            .then(locations => {
+                allLocations = locations;
+                loadMarkers(allLocations);
+            })
+            .catch(error => console.error("JSON 데이터 로드 실패:", error));
+
+        function searchLocations() {
+            var query = document.getElementById("searchBox").value.trim();
+
+            if (query === "") {
+                map.setCenter(new naver.maps.LatLng(37.5326, 126.9907));
+                map.setZoom(13);
+                loadMarkers(allLocations);
+            } else {
+                var filteredLocations = allLocations.filter(location =>
+                    location.title.includes(query) || location.address.includes(query)
+                );
+
+                if (filteredLocations.length > 0) {
+                    var firstLocation = filteredLocations[0];
+                    map.setCenter(new naver.maps.LatLng(firstLocation.latitude, firstLocation.longitude));
+                    map.setZoom(14);
+                }
+
+                loadMarkers(filteredLocations);
+            }
+        }
+
+        document.getElementById("searchButton").addEventListener("click", searchLocations);
+        document.getElementById("searchBox").addEventListener("keypress", function (e) {
+            if (e.key === "Enter") searchLocations();
+        });
+
+        document.getElementById("clearSearch").addEventListener("click", function () {
+            document.getElementById("searchBox").value = "";
+            map.setCenter(new naver.maps.LatLng(37.5326, 126.9907));
+            map.setZoom(13);
+            loadMarkers(allLocations);
+        });
+
+        function moveToCurrentLocation() {
+            if (navigator.geolocation) {
+                navigator.geolocation.getCurrentPosition(function (position) {
+                    var lat = position.coords.latitude;
+                    var lng = position.coords.longitude;
+                    map.setCenter(new naver.maps.LatLng(lat, lng));
+                    map.setZoom(14);
+                }, function () {
+                    alert("위치 정보를 가져올 수 없습니다.");
+                });
+            } else {
+                alert("이 브라우저에서는 위치 정보를 지원하지 않습니다.");
+            }
+        }
+
+        function launchNavi(app, lat, lng) {
+            if (!isMobile()) {
+                alert("모바일 기기에서만 사용 가능합니다.");
+                return;
+            }
+
+            if (app === "tmap") {
+                window.location.href = `tmap://route?goalx=${lng}&goaly=${lat}`;
+            } else if (app === "kakao") {
+                window.location.href = `kakaomap://route?ep=${lat},${lng}`;
+            }
+        }
+
+        function isMobile() {
+            return /iPhone|iPad|iPod|Android/i.test(navigator.userAgent);
+        }
+    </script>
+
+</body>
+</html>
