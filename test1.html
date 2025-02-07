@@ -11,14 +11,17 @@
             margin: 0;
             padding: 0;
             font-family: Arial, sans-serif;
-            text-align: left;
+            text-align: center;
         }
-
-        /* 테슬라 스타일 헤더 */
+        #map {
+            width: 100%;
+            height: calc(100vh - 60px);
+        }
+                /* 테슬라 스타일 헤더 */
         .header {
             width: 100%;
-            padding: 15px 20px; /* 왼쪽 여백 추가 */
-            text-align: left; /* 타이틀 왼쪽 정렬 */
+            padding: 15px 0;
+            text-align: center;
             font-size: 28px;
             font-weight: bold;
             color: #333;
@@ -30,11 +33,9 @@
         /* 검색 컨테이너 */
         .search-container {
             display: flex;
-            justify-content: flex-start; /* 검색창 & 버튼 왼쪽 정렬 */
+            justify-content: center;
             align-items: center;
             margin: 15px 0;
-            padding-left: 20px; /* 왼쪽 여백 추가 */
-            width: fit-content; /* 검색창이 너무 길지 않도록 조정 */
         }
 
         /* 검색 입력창 */
@@ -67,14 +68,7 @@
             font-size: 14px;
             margin-left: 10px;
         }
-
-        /* 지도 스타일 */
-        #map {
-            width: 100%;
-            height: calc(100vh - 60px);
-        }
-
-        /* 내 위치 찾기 버튼 */
+        
         .gps-button {
             position: absolute;
             top: 10px;
@@ -86,14 +80,30 @@
             cursor: pointer;
             box-shadow: 0 2px 5px rgba(0,0,0,0.3);
         }
+        .info-box {
+            padding: 10px;
+            font-size: 14px;
+        }
+        .navi-buttons {
+            margin-top: 10px;
+        }
+        .navi-buttons a {
+            text-decoration: none;
+            display: inline-block;
+            padding: 5px 10px;
+            margin: 5px;
+            border-radius: 5px;
+            color: white;
+            font-size: 14px;
+        }
+        .navi-tmap { background-color: #0068FF; }
+        .navi-kakao { background-color: #FEE500; color: black; }
     </style>
 </head>
 <body>
 
-    <!-- 테슬라 로고 및 제목 (왼쪽 정렬) -->
-    <div class="header">TESLA SUPERCHARGER</div>
+    <h1 style="color: #888; font-size: 28px; font-family: 'Arial Black', sans-serif;">TESLA SUPERCHARGER</h1>
 
-    <!-- 검색창 컨테이너 (왼쪽 정렬) -->
     <div class="search-container">
         <input type="text" id="searchBox" placeholder="지역명을 입력하세요">
         <button id="clearSearch">✖</button>
@@ -203,6 +213,23 @@
             } else {
                 alert("이 브라우저에서는 위치 정보를 지원하지 않습니다.");
             }
+        }
+
+        function launchNavi(app, lat, lng) {
+            if (!isMobile()) {
+                alert("모바일 기기에서만 사용 가능합니다.");
+                return;
+            }
+
+            if (app === "tmap") {
+                window.location.href = `tmap://route?goalx=${lng}&goaly=${lat}`;
+            } else if (app === "kakao") {
+                window.location.href = `kakaomap://route?ep=${lat},${lng}`;
+            }
+        }
+
+        function isMobile() {
+            return /iPhone|iPad|iPod|Android/i.test(navigator.userAgent);
         }
     </script>
 
