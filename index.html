@@ -116,7 +116,7 @@
                 });
 
                 var infoWindow = new naver.maps.InfoWindow({
-                    content: <div class="info-box">
+                    content: `<div class="info-box">
                                 <strong>${location.title}</strong><br>
                                 📍 <b>주소:</b> ${location.address}<br>
                                 🏬 <b>위치:</b> ${location.location}<br>
@@ -125,7 +125,7 @@
                                     <a class="navi-tmap" href="#" onclick="launchNavi('tmap', ${location.latitude}, ${location.longitude})">🚗 티맵</a>
                                     <a class="navi-kakao" href="#" onclick="launchNavi('kakao', ${location.latitude}, ${location.longitude})">🚗 카카오네비</a>
                                 </div>
-                              </div>
+                              </div>`
                 });
 
                 naver.maps.Event.addListener(marker, "click", function () {
@@ -204,9 +204,9 @@
             }
 
             if (app === "tmap") {
-                window.location.href = tmap://route?goalx=${lng}&goaly=${lat};
+                window.location.href = `tmap://route?goalx=${lng}&goaly=${lat}`;
             } else if (app === "kakao") {
-                window.location.href = kakaomap://route?ep=${lat},${lng};
+                window.location.href = `kakaomap://route?ep=${lat},${lng}`;
             }
         }
 
