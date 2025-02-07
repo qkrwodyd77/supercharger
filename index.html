@@ -18,6 +18,28 @@
             height: calc(100vh - 60px);
             position: relative;
         }
+        /* 내 위치 버튼을 지도 내부 우측 상단에 배치 */
+        .gps-button {
+            position: absolute;
+            top: 10px;
+            right: 10px;
+            background-color: rgba(255, 255, 255, 0.9);
+            border: 1px solid #ccc;
+            border-radius: 50%;
+            width: 40px;
+            height: 40px;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            cursor: pointer;
+            box-shadow: 0 2px 5px rgba(0,0,0,0.3);
+            z-index: 1000;
+        }
+        .gps-button img {
+            width: 20px;
+            height: 20px;
+        }
+        /* 검색 UI */
         .search-container {
             display: flex;
             justify-content: center;
@@ -52,45 +74,6 @@
             cursor: pointer;
             margin-left: 5px;
         }
-        /* 내 위치 버튼을 지도 내 우측 상단에 배치 */
-        .gps-button {
-            position: absolute;
-            top: 10px;
-            right: 10px;
-            background-color: rgba(255, 255, 255, 0.9);
-            border: 1px solid #ccc;
-            border-radius: 50%;
-            width: 40px;
-            height: 40px;
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            cursor: pointer;
-            box-shadow: 0 2px 5px rgba(0,0,0,0.3);
-            z-index: 1000;
-        }
-        .gps-button img {
-            width: 20px;
-            height: 20px;
-        }
-        .info-box {
-            padding: 10px;
-            font-size: 14px;
-        }
-        .navi-buttons {
-            margin-top: 10px;
-        }
-        .navi-buttons a {
-            text-decoration: none;
-            display: inline-block;
-            padding: 5px 10px;
-            margin: 5px;
-            border-radius: 5px;
-            color: white;
-            font-size: 14px;
-        }
-        .navi-tmap { background-color: #0068FF; }
-        .navi-kakao { background-color: #FEE500; color: black; }
     </style>
 </head>
 <body>
@@ -103,10 +86,10 @@
         <button id="searchButton">검색</button>
     </div>
 
-    <div id="map"></div>
-    
-    <!-- 내 위치 버튼 -->
-    <button class="gps-button" onclick="moveToCurrentLocation()">
+    <div id="map" style="position: relative;"></div>
+
+    <!-- 내 위치 버튼을 지도 안에 배치 -->
+    <button class="gps-button" onclick="moveToCurrentLocation()" style="position: absolute;">
         <img src="https://upload.wikimedia.org/wikipedia/commons/e/ec/Location_dot_black.svg" alt="내 위치">
     </button>
 
@@ -114,87 +97,6 @@
         var map = new naver.maps.Map('map', {
             center: new naver.maps.LatLng(37.5326, 126.9907), // 서울 용산구 중심
             zoom: 13
-        });
-
-        var allLocations = [];
-        var markers = [];
-
-        function loadMarkers(locations) {
-            markers.forEach(marker => marker.setMap(null));
-            markers = [];
-
-            locations.forEach(location => {
-                var marker = new naver.maps.Marker({
-                    position: new naver.maps.LatLng(location.latitude, location.longitude),
-                    map: map,
-                    title: location.title
-                });
-
-                var infoWindow = new naver.maps.InfoWindow({
-                    content: `<div class="info-box">
-                                <strong>${location.title}</strong><br>
-                                📍 <b>주소:</b> ${location.address}<br>
-                                🏬 <b>위치:</b> ${location.location}<br>
-                                💰 <b>주차요금:</b> ${location.fee || '정보 없음'}<br>
-                                <div class="navi-buttons">
-                                    <a class="navi-tmap" href="#" onclick="launchNavi('tmap', ${location.latitude}, ${location.longitude})">🚗 티맵</a>
-                                    <a class="navi-kakao" href="#" onclick="launchNavi('kakao', ${location.latitude}, ${location.longitude})">🚗 카카오네비</a>
-                                </div>
-                              </div>`
-                });
-
-                naver.maps.Event.addListener(marker, "click", function () {
-                    if (infoWindow.getMap()) {
-                        infoWindow.close();
-                    } else {
-                        infoWindow.open(map, marker);
-                    }
-                });
-
-                markers.push(marker);
-            });
-        }
-
-        fetch("https://qkrwodyd77.github.io/supercharger/superchargers.json")
-            .then(response => response.json())
-            .then(locations => {
-                allLocations = locations;
-                loadMarkers(allLocations);
-            })
-            .catch(error => console.error("JSON 데이터 로드 실패:", error));
-
-        function searchLocations() {
-            var query = document.getElementById("searchBox").value.trim();
-
-            if (query === "") {
-                map.setCenter(new naver.maps.LatLng(37.5326, 126.9907));
-                map.setZoom(13);
-                loadMarkers(allLocations);
-            } else {
-                var filteredLocations = allLocations.filter(location =>
-                    location.title.includes(query) || location.address.includes(query)
-                );
-
-                if (filteredLocations.length > 0) {
-                    var firstLocation = filteredLocations[0];
-                    map.setCenter(new naver.maps.LatLng(firstLocation.latitude, firstLocation.longitude));
-                    map.setZoom(14);
-                }
-
-                loadMarkers(filteredLocations);
-            }
-        }
-
-        document.getElementById("searchButton").addEventListener("click", searchLocations);
-        document.getElementById("searchBox").addEventListener("keypress", function (e) {
-            if (e.key === "Enter") searchLocations();
-        });
-
-        document.getElementById("clearSearch").addEventListener("click", function () {
-            document.getElementById("searchBox").value = "";
-            map.setCenter(new naver.maps.LatLng(37.5326, 126.9907));
-            map.setZoom(13);
-            loadMarkers(allLocations);
         });
 
         function moveToCurrentLocation() {
