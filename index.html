@@ -16,6 +16,7 @@
         #map {
             width: 100%;
             height: calc(100vh - 60px);
+            position: relative;
         }
         .search-container {
             display: flex;
@@ -51,16 +52,26 @@
             cursor: pointer;
             margin-left: 5px;
         }
+        /* 내 위치 버튼을 지도 내 우측 상단에 배치 */
         .gps-button {
             position: absolute;
             top: 10px;
             right: 10px;
-            background-color: white;
+            background-color: rgba(255, 255, 255, 0.9);
             border: 1px solid #ccc;
             border-radius: 50%;
-            padding: 8px;
+            width: 40px;
+            height: 40px;
+            display: flex;
+            justify-content: center;
+            align-items: center;
             cursor: pointer;
             box-shadow: 0 2px 5px rgba(0,0,0,0.3);
+            z-index: 1000;
+        }
+        .gps-button img {
+            width: 20px;
+            height: 20px;
         }
         .info-box {
             padding: 10px;
@@ -93,7 +104,11 @@
     </div>
 
     <div id="map"></div>
-    <button class="gps-button" onclick="moveToCurrentLocation()">📍</button>
+    
+    <!-- 내 위치 버튼 -->
+    <button class="gps-button" onclick="moveToCurrentLocation()">
+        <img src="https://upload.wikimedia.org/wikipedia/commons/e/ec/Location_dot_black.svg" alt="내 위치">
+    </button>
 
     <script>
         var map = new naver.maps.Map('map', {
@@ -195,23 +210,6 @@
             } else {
                 alert("이 브라우저에서는 위치 정보를 지원하지 않습니다.");
             }
-        }
-
-        function launchNavi(app, lat, lng) {
-            if (!isMobile()) {
-                alert("모바일 기기에서만 사용 가능합니다.");
-                return;
-            }
-
-            if (app === "tmap") {
-                window.location.href = `tmap://route?goalx=${lng}&goaly=${lat}`;
-            } else if (app === "kakao") {
-                window.location.href = `kakaomap://route?ep=${lat},${lng}`;
-            }
-        }
-
-        function isMobile() {
-            return /iPhone|iPad|iPod|Android/i.test(navigator.userAgent);
         }
     </script>
 
