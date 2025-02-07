@@ -2,177 +2,230 @@
 <html lang="ko">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Tesla Supercharger</title>
     <script src="https://openapi.map.naver.com/openapi/v3/maps.js?ncpClientId=sva11nqtl7"></script>
     <style>
         body, html {
-            height: 100%;
             margin: 0;
             padding: 0;
-            font-family: Arial, sans-serif;
-            text-align: center;
-        }
-        #map {
             width: 100%;
-            height: calc(100vh - 60px);
-            position: relative;
-        }
-        .search-container {
+            height: 100%;
             display: flex;
-            justify-content: center;
+            flex-direction: column;
             align-items: center;
-            margin: 10px 0;
-            position: relative;
         }
+
+        /* 타이틀 스타일 */
+        .title {
+            font-family: 'Arial', sans-serif;
+            font-size: 28px;
+            font-weight: bold;
+            color: #555;
+            margin-top: 10px;
+            text-transform: uppercase;
+            letter-spacing: 2px;
+        }
+
+        /* 검색 컨테이너 */
+        .search-container {
+            position: relative;
+            width: 90%;
+            max-width: 500px;
+            display: flex;
+            align-items: center;
+            margin-bottom: 10px;
+        }
+
+        /* 검색 입력 필드 */
         #searchBox {
-            width: 280px;
-            padding: 8px 35px 8px 10px;
+            flex-grow: 1;
+            padding: 10px 40px 10px 10px;
+            font-size: 16px;
             border: 1px solid #ccc;
-            border-radius: 4px;
-            position: relative;
+            border-radius: 5px;
+            outline: none;
         }
-        #clearSearch {
+
+        /* 검색 버튼 */
+        #searchButton {
+            padding: 10px 15px;
+            background-color: #03C75A;
+            color: white;
+            font-size: 16px;
+            border: none;
+            cursor: pointer;
+            border-radius: 5px;
+            margin-left: 8px;
+        }
+
+        /* X 버튼 스타일 */
+        .clear-btn {
             position: absolute;
-            right: 155px;
+            right: 50px;
             top: 50%;
             transform: translateY(-50%);
             cursor: pointer;
+            font-size: 18px;
+            color: #888;
             background: none;
             border: none;
-            font-size: 16px;
-            color: #888;
+            display: none;
         }
-        #searchButton {
-            padding: 8px 15px;
+
+        /* 지도 컨테이너 */
+        #map {
+            width: 100%;
+            height: calc(100vh - 100px);
+        }
+
+        /* 내 위치 버튼 */
+        #myLocationButton {
+            position: absolute;
+            top: 10px;
+            right: 10px;
+            background: white;
+            padding: 10px;
+            border-radius: 50%;
+            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.3);
+            cursor: pointer;
+        }
+
+        /* 네비게이션 버튼 */
+        .nav-buttons {
+            display: flex;
+            justify-content: center;
+            gap: 10px;
+            margin-top: 10px;
+        }
+
+        .nav-buttons a {
+            padding: 10px;
             background-color: #03C75A;
             color: white;
-            border: none;
-            border-radius: 4px;
-            cursor: pointer;
-            margin-left: 5px;
-        }
-        .gps-button {
-            position: fixed;
-            top: 80px;
-            right: 20px;
-            background-color: white;
-            border: 1px solid #ccc;
-            border-radius: 50%;
-            padding: 8px;
-            cursor: pointer;
-            z-index: 1000;
-            box-shadow: 0px 0px 5px rgba(0, 0, 0, 0.3);
+            text-decoration: none;
+            border-radius: 5px;
         }
     </style>
 </head>
 <body>
 
-<div class="search-container">
-    <input type="text" id="searchBox" placeholder="지역을 입력하세요">
-    <button id="clearSearch">X</button>
-    <button id="searchButton">검색</button>
-</div>
+    <!-- 타이틀 -->
+    <div class="title">Tesla Supercharger</div>
 
-<div id="map"></div>
+    <!-- 검색창 -->
+    <div class="search-container">
+        <input type="text" id="searchBox" placeholder="지역을 입력하세요">
+        <button class="clear-btn" id="clearSearch">&times;</button>
+        <button id="searchButton">검색</button>
+    </div>
 
-<button class="gps-button" id="gpsButton">📍</button>
+    <!-- 지도 -->
+    <div id="map"></div>
 
-<script>
-    var map = new naver.maps.Map('map', {
-        center: new naver.maps.LatLng(37.5326, 126.9902), // 용산구 중심
-        zoom: 12
-    });
+    <!-- 내 위치 버튼 -->
+    <button id="myLocationButton">📍</button>
 
-    var allLocations = []; 
-
-    function loadMarkers(locations) {
-        map.dataProvider && map.dataProvider.setMap(null);
-
-        locations.forEach(location => {
-            var marker = new naver.maps.Marker({
-                position: new naver.maps.LatLng(location.latitude, location.longitude),
-                map: map,
-                title: location.title
-            });
-
-            var infoWindow = new naver.maps.InfoWindow({
-                content: `<div style="padding:10px; font-size:14px;">
-                            <strong>${location.title}</strong><br>
-                            📍 <b>주소:</b> ${location.address}<br>
-                            🏬 <b>위치:</b> ${location.location}<br>
-                            💰 <b>주차요금:</b> ${location.fee ? location.fee : '정보 없음'}
-                          </div>`
-            });
-
-            naver.maps.Event.addListener(marker, "click", function () {
-                if (infoWindow.getMap()) {
-                    infoWindow.close();
-                } else {
-                    infoWindow.open(map, marker);
-                }
-            });
+    <script>
+        var map = new naver.maps.Map('map', {
+            center: new naver.maps.LatLng(37.5326, 126.9903), // 서울 용산구 중심
+            zoom: 12
         });
-    }
 
-    fetch("https://qkrwodyd77.github.io/supercharger/superchargers.json")
-        .then(response => response.json())
-        .then(locations => {
-            allLocations = locations;
-            loadMarkers(allLocations);
-        })
-        .catch(error => console.error("JSON 데이터 로드 실패:", error));
+        var allLocations = []; // 전체 데이터를 저장할 배열
+        var markers = []; // 생성된 마커들을 저장할 배열
+        var infoWindows = []; // 생성된 정보창들을 저장할 배열
 
-    function searchLocations() {
-        var query = document.getElementById("searchBox").value.trim();
+        function loadMarkers(locations) {
+            markers.forEach(marker => marker.setMap(null)); // 기존 마커 삭제
+            markers = [];
+            infoWindows = [];
 
-        if (query === "") {
-            map.setCenter(new naver.maps.LatLng(37.5326, 126.9902)); // 용산구 중심
-            map.setZoom(12);
-            loadMarkers(allLocations);
-        } else {
-            var filteredLocations = allLocations.filter(location =>
-                location.title.includes(query) || location.address.includes(query)
-            );
+            locations.forEach(location => {
+                var marker = new naver.maps.Marker({
+                    position: new naver.maps.LatLng(location.latitude, location.longitude),
+                    map: map,
+                    title: location.title
+                });
 
-            if (filteredLocations.length > 0) {
-                var firstLocation = filteredLocations[0];
-                map.setCenter(new naver.maps.LatLng(firstLocation.latitude, firstLocation.longitude));
-                map.setZoom(14);
-            }
+                var infoWindow = new naver.maps.InfoWindow({
+                    content: `<div style="padding:10px; font-size:14px;">
+                                <strong>${location.title}</strong><br>
+                                📍 <b>주소:</b> ${location.address}<br>
+                                🏬 <b>위치:</b> ${location.location}<br>
+                                💰 <b>주차요금:</b> ${location.fee ? location.fee : '정보 없음'}<br>
+                                <div class="nav-buttons">
+                                    <a href="tmap://route?goalx=${location.longitude}&goaly=${location.latitude}" target="_blank">T맵</a>
+                                    <a href="kakaomap://route?sp=${userLat},${userLng}&ep=${location.latitude},${location.longitude}&by=car" target="_blank">카카오내비</a>
+                                </div>
+                              </div>`
+                });
 
-            loadMarkers(filteredLocations);
-        }
-    }
+                naver.maps.Event.addListener(marker, "click", function () {
+                    infoWindows.forEach(win => win.close());
+                    infoWindow.open(map, marker);
+                });
 
-    document.getElementById("searchButton").addEventListener("click", searchLocations);
-    document.getElementById("searchBox").addEventListener("keypress", function (e) {
-        if (e.key === "Enter") {
-            searchLocations();
-        }
-    });
-
-    document.getElementById("clearSearch").addEventListener("click", function () {
-        document.getElementById("searchBox").value = "";
-        map.setCenter(new naver.maps.LatLng(37.5326, 126.9902)); // 용산구 중심
-        map.setZoom(12);
-        loadMarkers(allLocations);
-    });
-
-    document.getElementById("gpsButton").addEventListener("click", function () {
-        if (navigator.geolocation) {
-            navigator.geolocation.getCurrentPosition(function (position) {
-                var userLatLng = new naver.maps.LatLng(position.coords.latitude, position.coords.longitude);
-                map.setCenter(userLatLng);
-                map.setZoom(14);
-            }, function (error) {
-                alert("위치 정보를 가져올 수 없습니다.");
+                markers.push(marker);
+                infoWindows.push(infoWindow);
             });
-        } else {
-            alert("이 브라우저에서는 위치 정보를 지원하지 않습니다.");
+
+            if (locations.length > 0) {
+                var bounds = new naver.maps.LatLngBounds();
+                locations.forEach(location => bounds.extend(new naver.maps.LatLng(location.latitude, location.longitude)));
+                map.fitBounds(bounds);
+            }
         }
-    });
-</script>
+
+        // JSON 데이터 로드
+        fetch("https://qkrwodyd77.github.io/supercharger/superchargers.json")
+            .then(response => response.json())
+            .then(locations => {
+                allLocations = locations;
+                loadMarkers(allLocations);
+            })
+            .catch(error => console.error("JSON 데이터 로드 실패:", error));
+
+        // 검색 기능
+        function searchLocations() {
+            var query = document.getElementById("searchBox").value.trim();
+
+            if (query === "") {
+                map.setCenter(new naver.maps.LatLng(37.5326, 126.9903)); // 서울 중심
+                map.setZoom(12);
+                loadMarkers(allLocations);
+            } else {
+                var filteredLocations = allLocations.filter(location =>
+                    location.title.includes(query) || location.address.includes(query)
+                );
+                loadMarkers(filteredLocations);
+            }
+        }
+
+        // 검색 버튼 이벤트
+        document.getElementById("searchButton").addEventListener("click", searchLocations);
+        document.getElementById("searchBox").addEventListener("keyup", function(event) {
+            if (event.key === "Enter") searchLocations();
+        });
+
+        // X 버튼 이벤트
+        document.getElementById("clearSearch").addEventListener("click", function() {
+            document.getElementById("searchBox").value = "";
+            searchLocations();
+        });
+
+        // 내 위치 찾기 버튼 이벤트
+        document.getElementById("myLocationButton").addEventListener("click", function() {
+            if (navigator.geolocation) {
+                navigator.geolocation.getCurrentPosition(function(position) {
+                    var lat = position.coords.latitude;
+                    var lng = position.coords.longitude;
+                    map.setCenter(new naver.maps.LatLng(lat, lng));
+                    map.setZoom(15);
+                });
+            }
+        });
+    </script>
 
 </body>
 </html>
