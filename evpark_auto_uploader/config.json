@@ -1,0 +1,26 @@
+{
+    "naver": {
+        "id": "your_naver_id",
+        "password": "your_naver_password",
+        "boards": [
+            {
+                "url": "https://cafe.naver.com/ArticleList.nhn?search.clubid=21771803&search.menuid=66&search.boardtype=L",
+                "evpark_url": "https://www.evpark.co.kr/posts/%EC%A0%84%EA%B8%B0%EC%B0%A8-%EC%9E%90%EC%9C%A0%EA%B2%8C%EC%8B%9C%ED%8C%90"
+            },
+            {
+                "url": "https://cafe.naver.com/ArticleList.nhn?search.clubid=21771803&search.menuid=67&search.boardtype=L",
+                "evpark_url": "https://www.evpark.co.kr/posts/%EC%A0%84%EA%B8%B0%EC%B0%A8-Q&A"
+            },
+            {
+                "url": "https://cafe.naver.com/ArticleList.nhn?search.clubid=21771803&search.menuid=682&search.boardtype=L",
+                "evpark_url": "https://www.evpark.co.kr/posts/%20%EB%82%B4%EC%A0%84%EA%B8%B0%EC%B0%A8-%EB%BD%90%EB%82%B4%EA%B8%B0"
+            }
+        ]
+    },
+    "evpark": {
+        "accounts": [
+            {"id": "qkrwodyd7", "password": "1234qwer"},
+            {"id": "qkrwodyd77", "password": "1234qwer"}
+        ]
+    }
+}
