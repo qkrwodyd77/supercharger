@@ -237,6 +237,14 @@
 
         document.getElementById("searchButton").addEventListener("click", searchLocations);
 
+          // 🔽 [추가] 검색창에서 "이동(Enter)" 키를 눌렀을 때도 검색되도록 설정
+        document.getElementById("searchBox").addEventListener("keypress", function (e) {
+            if (e.key === "Enter" || e.keyCode === 13) {
+                e.preventDefault(); // 기본 이벤트 방지 (모바일 키보드 문제 해결)
+                searchLocations();
+            }
+        });
+
         // GPS 기능
         function moveToCurrentLocation() {
             if (navigator.geolocation) {
