@@ -5,9 +5,8 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
     <title>Tesla Supercharger</title>
     <script src="https://openapi.map.naver.com/openapi/v3/maps.js?ncpClientId=sva11nqtl7"></script>
-    
     <style>
-        /* 기본 스타일 초기화 */
+        /* 기본 스타일 */
         body, html {
             height: 100%;
             margin: 0;
@@ -17,17 +16,15 @@
 
         /* 헤더 스타일 */
         .header {
-            width: 100%;
-            padding: 15px 20px;
-            background: black;
-            color: white;
             display: flex;
-            align-items: center;
             justify-content: space-between;
+            align-items: center;
+            padding: 15px 20px;
+            background: #000;
+            color: white;
         }
 
-        .header h1 {
-            margin: 0;
+        .logo {
             font-size: 24px;
             font-weight: bold;
         }
@@ -44,119 +41,101 @@
             font-size: 16px;
         }
 
-        /* 모바일 메뉴 버튼 */
-        .menu-button {
+        /* 모바일 햄버거 메뉴 스타일 */
+        .menu-toggle {
             display: none;
             font-size: 24px;
             cursor: pointer;
         }
 
-        /* 검색창 컨테이너 */
+        /* 검색창 스타일 */
         .search-container {
             display: flex;
             align-items: center;
-            gap: 10px;
             margin: 15px 20px;
         }
 
         #searchBox {
             width: 250px;
-            padding: 8px;
-            border-radius: 20px;
+            padding: 10px;
             border: 1px solid #ccc;
+            border-radius: 20px;
+            font-size: 14px;
         }
 
         #searchButton {
-            padding: 8px 15px;
-            background-color: red;
+            padding: 10px 15px;
+            background-color: black;
             color: white;
             border: none;
             border-radius: 20px;
             cursor: pointer;
+            margin-left: 10px;
         }
 
+        /* 지도 스타일 */
         #map {
             width: 100%;
-            height: calc(100vh - 120px);
+            height: calc(100vh - 100px);
         }
 
-        /* GPS 버튼 */
+        /* GPS 버튼 스타일 */
         .gps-button {
             position: absolute;
             bottom: 20px;
             left: 50%;
             transform: translateX(-50%);
-            background-color: white;
-            border: 1px solid #ccc;
-            border-radius: 50%;
-            padding: 10px;
-            cursor: pointer;
-            font-size: 20px;
-        }
-
-        /* 네비게이션 버튼 */
-        .navi-buttons {
-            margin-top: 10px;
-        }
-
-        .navi-buttons a {
-            text-decoration: none;
-            display: inline-block;
-            padding: 5px 10px;
-            margin: 5px;
-            border-radius: 5px;
+            background-color: red;
             color: white;
-            font-size: 14px;
+            border: none;
+            padding: 10px;
+            border-radius: 10px;
+            cursor: pointer;
         }
-
-        .navi-tmap { background-color: #0068FF; }
-        .navi-kakao { background-color: #FEE500; color: black; }
 
         /* 모바일 반응형 */
-        @media screen and (max-width: 768px) {
+        @media (max-width: 768px) {
             .nav-menu {
                 display: none;
                 flex-direction: column;
-                background: black;
-                padding: 10px;
+                background: #000;
                 position: absolute;
                 top: 60px;
                 right: 0;
-                width: 150px;
-                text-align: right;
+                width: 200px;
+                padding: 10px;
+                box-shadow: 0 2px 5px rgba(0,0,0,0.5);
             }
 
-            .nav-menu.active {
+            .nav-menu.show {
                 display: flex;
             }
 
-            .menu-button {
+            .menu-toggle {
                 display: block;
-                color: white;
             }
 
             .search-container {
                 flex-direction: column;
                 align-items: flex-start;
-                margin-top: 10px;
             }
 
             #searchBox {
                 width: 100%;
+                margin-bottom: 10px;
             }
         }
     </style>
 </head>
-
 <body>
 
-    <!-- 헤더 -->
+    <!-- 상단 헤더 -->
     <div class="header">
-        <h1>TESLA SUPERCHARGER</h1>
-        
-        <!-- 모바일 메뉴 버튼 -->
-        <span class="menu-button" onclick="toggleMenu()">☰</span>
-        
+        <div class="logo">TESLA SUPERCHARGER</div>
+
+        <!-- 모바일 햄버거 메뉴 -->
+        <div class="menu-toggle" onclick="toggleMenu()">☰</div>
+
         <!-- 네비게이션 메뉴 -->
         <div class="nav-menu">
             <a href="https://www.evpark.co.kr/">전기차놀이터</a>
@@ -172,17 +151,20 @@
 
     <!-- 네이버 지도 -->
     <div id="map"></div>
-    <button class="gps-button" onclick="moveToCurrentLocation()">📍</button>
+    
+    <!-- GPS 버튼 -->
+    <button class="gps-button" onclick="moveToCurrentLocation()">📍 내 위치</button>
 
     <script>
         var map = new naver.maps.Map('map', {
-            center: new naver.maps.LatLng(37.5326, 126.9907), // 서울 용산구 중심
+            center: new naver.maps.LatLng(37.5326, 126.9907), // 서울 중심
             zoom: 13
         });
 
         var allLocations = [];
         var markers = [];
 
+        // 지도에 마커 표시 함수
         function loadMarkers(locations) {
             markers.forEach(marker => marker.setMap(null));
             markers = [];
@@ -195,14 +177,16 @@
                 });
 
                 var infoWindow = new naver.maps.InfoWindow({
-                    content: `<div class="info-box">
+                    content: `<div style="padding:10px; font-size:14px;">
                                 <strong>${location.title}</strong><br>
                                 📍 <b>주소:</b> ${location.address}<br>
                                 🏬 <b>위치:</b> ${location.location}<br>
                                 💰 <b>주차요금:</b> ${location.fee || '정보 없음'}<br>
-                                <div class="navi-buttons">
-                                    <a class="navi-tmap" href="#" onclick="launchNavi('tmap', ${location.latitude}, ${location.longitude})">🚗 티맵</a>
-                                    <a class="navi-kakao" href="#" onclick="launchNavi('kakao', ${location.latitude}, ${location.longitude})">🚗 카카오네비</a>
+                                <div>
+                                    <a href="tmap://route?goalx=${location.longitude}&goaly=${location.latitude}" 
+                                       style="display:inline-block; margin-top:5px; padding:5px 10px; background:#0068FF; color:white; border-radius:5px;">티맵</a>
+                                    <a href="kakaomap://route?ep=${location.latitude},${location.longitude}" 
+                                       style="display:inline-block; margin-top:5px; padding:5px 10px; background:#FEE500; color:black; border-radius:5px;">카카오네비</a>
                                 </div>
                               </div>`
                 });
@@ -219,6 +203,7 @@
             });
         }
 
+        // JSON 데이터 로드
         fetch("https://qkrwodyd77.github.io/supercharger/superchargers.json")
             .then(response => response.json())
             .then(locations => {
@@ -227,23 +212,44 @@
             })
             .catch(error => console.error("JSON 데이터 로드 실패:", error));
 
-        function toggleMenu() {
-            document.querySelector('.nav-menu').classList.toggle('active');
+        // 검색 기능
+        function searchLocations() {
+            var query = document.getElementById("searchBox").value.trim();
+
+            if (query === "") {
+                map.setCenter(new naver.maps.LatLng(37.5326, 126.9907));
+                map.setZoom(13);
+                loadMarkers(allLocations);
+            } else {
+                var filteredLocations = allLocations.filter(location =>
+                    location.title.includes(query) || location.address.includes(query)
+                );
+
+                if (filteredLocations.length > 0) {
+                    var firstLocation = filteredLocations[0];
+                    map.setCenter(new naver.maps.LatLng(firstLocation.latitude, firstLocation.longitude));
+                    map.setZoom(14);
+                }
+
+                loadMarkers(filteredLocations);
+            }
         }
 
+        document.getElementById("searchButton").addEventListener("click", searchLocations);
+
+        // GPS 기능
         function moveToCurrentLocation() {
             if (navigator.geolocation) {
                 navigator.geolocation.getCurrentPosition(function (position) {
-                    var lat = position.coords.latitude;
-                    var lng = position.coords.longitude;
-                    map.setCenter(new naver.maps.LatLng(lat, lng));
+                    map.setCenter(new naver.maps.LatLng(position.coords.latitude, position.coords.longitude));
                     map.setZoom(14);
-                }, function () {
-                    alert("위치 정보를 가져올 수 없습니다.");
                 });
-            } else {
-                alert("이 브라우저에서는 위치 정보를 지원하지 않습니다.");
             }
+        }
+
+        // 햄버거 메뉴 기능
+        function toggleMenu() {
+            document.querySelector(".nav-menu").classList.toggle("show");
         }
     </script>
 
