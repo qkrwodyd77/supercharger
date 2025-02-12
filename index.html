@@ -6,110 +6,121 @@
     <title>Tesla Supercharger</title>
     <script src="https://openapi.map.naver.com/openapi/v3/maps.js?ncpClientId=sva11nqtl7"></script>
     <style>
+        /* 기본 스타일 */
         body, html {
             height: 100%;
             margin: 0;
             padding: 0;
-            font-family: Arial, sans-serif;
-            text-align: center;
-        }
-        #map {
-            width: 100%;
-            height: calc(100vh - 60px);
-        }
-                /* 테슬라 스타일 헤더 */
-        .header {
-            width: 100%;
-            padding: 15px 0;
-            text-align: center;
-            font-size: 28px;
-            font-weight: bold;
-            color: #333;
-            background: linear-gradient(to right, #f4e2c3, #f4e2c3);
-            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
-            font-family: 'Arial Black', sans-serif;
+            font-family: 'Arial', sans-serif;
         }
 
-        /* 검색 컨테이너 */
+        /* 상단 네비게이션 바 */
+        .nav-bar {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding: 15px 30px;
+            background: #fff;
+            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+            position: relative;
+            z-index: 1000;
+        }
+
+        /* 테슬라 스타일 타이틀 */
+        .nav-title {
+            font-size: 24px;
+            font-weight: bold;
+            color: #333;
+            font-family: 'Arial Black', sans-serif;
+            text-transform: uppercase;
+        }
+
+        /* 네비게이션 메뉴 */
+        .nav-menu {
+            display: flex;
+            align-items: center;
+            gap: 20px;
+        }
+
+        /* 네비게이션 메뉴 버튼 */
+        .nav-menu a {
+            text-decoration: none;
+            font-size: 16px;
+            font-weight: bold;
+            color: #333;
+            padding: 8px 12px;
+            border-radius: 4px;
+            transition: all 0.3s ease;
+        }
+
+        /* 메뉴 hover 효과 */
+        .nav-menu a:hover {
+            background: rgba(0, 0, 0, 0.1);
+        }
+
+        /* 검색창 컨테이너 */
         .search-container {
             display: flex;
-            justify-content: center;
             align-items: center;
-            margin: 15px 0;
+            gap: 10px;
         }
 
         /* 검색 입력창 */
         #searchBox {
-            width: 300px;
-            padding: 10px;
+            width: 250px;
+            padding: 8px 12px;
             border: 1px solid #ccc;
             border-radius: 20px;
             font-size: 14px;
         }
 
-        /* X 버튼 */
-        #clearSearch {
-            margin-left: -30px;
-            background: none;
-            border: none;
-            font-size: 16px;
-            color: #888;
-            cursor: pointer;
-        }
-
         /* 검색 버튼 */
         #searchButton {
-            padding: 10px 15px;
+            padding: 8px 12px;
             background-color: black;
             color: white;
             border: none;
             border-radius: 20px;
             cursor: pointer;
             font-size: 14px;
-            margin-left: 10px;
         }
-        
+
+        /* 지도 스타일 */
+        #map {
+            width: 100%;
+            height: calc(100vh - 60px);
+        }
+
+        /* GPS 버튼 */
         .gps-button {
             position: absolute;
-            top: 10px;
-            right: 10px;
+            bottom: 20px;
+            right: 20px;
             background-color: white;
             border: 1px solid #ccc;
             border-radius: 50%;
-            padding: 8px;
-            cursor: pointer;
-            box-shadow: 0 2px 5px rgba(0,0,0,0.3);
-        }
-        .info-box {
             padding: 10px;
-            font-size: 14px;
+            cursor: pointer;
+            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.3);
         }
-        .navi-buttons {
-            margin-top: 10px;
-        }
-        .navi-buttons a {
-            text-decoration: none;
-            display: inline-block;
-            padding: 5px 10px;
-            margin: 5px;
-            border-radius: 5px;
-            color: white;
-            font-size: 14px;
-        }
-        .navi-tmap { background-color: #0068FF; }
-        .navi-kakao { background-color: #FEE500; color: black; }
     </style>
 </head>
 <body>
 
-    <h1 style="color: #888; font-size: 28px; font-family: 'Arial Black', sans-serif;">TESLA SUPERCHARGER</h1>
-
-    <div class="search-container">
-        <input type="text" id="searchBox" placeholder="지역명을 입력하세요">
-        <button id="clearSearch">✖</button>
-        <button id="searchButton">검색</button>
+    <!-- 상단 네비게이션 바 -->
+    <div class="nav-bar">
+        <div class="nav-title">TESLA SUPERCHARGER</div>
+        <div class="search-container">
+            <input type="text" id="searchBox" placeholder="지역명을 입력하세요">
+            <button id="searchButton">검색</button>
+        </div>
+        <div class="nav-menu">
+            <a href="https://www.evpark.co.kr/" target="_blank">전기차놀이터</a>
+            <a href="https://www.evpark.co.kr/" target="_blank">테슬라정보</a>
+        </div>
     </div>
 
+    <!-- 지도 영역 -->
     <div id="map"></div>
     <button class="gps-button" onclick="moveToCurrentLocation()">📍</button>
 
@@ -134,15 +145,11 @@
                 });
 
                 var infoWindow = new naver.maps.InfoWindow({
-                    content: `<div class="info-box">
+                    content: `<div>
                                 <strong>${location.title}</strong><br>
                                 📍 <b>주소:</b> ${location.address}<br>
                                 🏬 <b>위치:</b> ${location.location}<br>
-                                💰 <b>주차요금:</b> ${location.fee || '정보 없음'}<br>
-                                <div class="navi-buttons">
-                                    <a class="navi-tmap" href="#" onclick="launchNavi('tmap', ${location.latitude}, ${location.longitude})">🚗 티맵</a>
-                                    <a class="navi-kakao" href="#" onclick="launchNavi('kakao', ${location.latitude}, ${location.longitude})">🚗 카카오네비</a>
-                                </div>
+                                💰 <b>주차요금:</b> ${location.fee || '정보 없음'}
                               </div>`
                 });
 
@@ -193,13 +200,6 @@
             if (e.key === "Enter") searchLocations();
         });
 
-        document.getElementById("clearSearch").addEventListener("click", function () {
-            document.getElementById("searchBox").value = "";
-            map.setCenter(new naver.maps.LatLng(37.5326, 126.9907));
-            map.setZoom(13);
-            loadMarkers(allLocations);
-        });
-
         function moveToCurrentLocation() {
             if (navigator.geolocation) {
                 navigator.geolocation.getCurrentPosition(function (position) {
@@ -214,25 +214,7 @@
                 alert("이 브라우저에서는 위치 정보를 지원하지 않습니다.");
             }
         }
-
-        function launchNavi(app, lat, lng) {
-            if (!isMobile()) {
-                alert("모바일 기기에서만 사용 가능합니다.");
-                return;
-            }
-
-            if (app === "tmap") {
-                window.location.href = `tmap://route?goalx=${lng}&goaly=${lat}`;
-            } else if (app === "kakao") {
-                window.location.href = `kakaomap://route?ep=${lat},${lng}`;
-            }
-        }
-
-        function isMobile() {
-            return /iPhone|iPad|iPod|Android/i.test(navigator.userAgent);
-        }
     </script>
 
 </body>
 </html>
-
